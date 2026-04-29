@@ -12,10 +12,11 @@ Modern APIs act as entry points into systems. Each endpoint represents a potenti
 
 GateKeeper was built to:
 
-Ensure only valid and authorized requests are accepted
-Verify proper handling of invalid or unexpected inputs
-Simulate real-world misuse and attack scenarios
-Confirm APIs fail safely without exposing sensitive information
+- Ensure only valid and authorized requests are accepted
+- Verify proper handling of invalid or unexpected inputs
+- Simulate real-world misuse and attack scenarios
+- Confirm APIs fail safely without exposing sensitive information
+
 🧠 Core Concept
 
 “Every API endpoint is a gate. GateKeeper ensures that only trusted interactions pass through while identifying weaknesses in security, validation, and system behavior.”
