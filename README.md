@@ -122,8 +122,6 @@ Minimal setup
 Clear commands
 No over-engineering
 
-💡 This is HUGE. Most security tools fail here.
-
 🔹 2. Output Readability
 
 “People should immediately understand what they’re looking at.”
@@ -140,13 +138,9 @@ You eventually want:
 → Risk: Unauthorized access exposure
 → Recommendation: Enforce token validation
 
-👉 That’s real-world value
-
 🔹 3. Reliability
 
 “Not perfect—but trustworthy.”
-
-This is exactly how security tools should be framed.
 
 👉 Not:
 
@@ -155,19 +149,18 @@ This is exactly how security tools should be framed.
 But:
 
 “We consistently catch what matters”
-🔹 4. Evolution (🔥 This is big)
+
+🔹 4. Evolution 
 
 “It should adapt over time.”
 
-That’s advanced thinking.
+This will include: 
 
-You’re talking about:
+- Extensibility
 
-Extensibility
-Updating rules
-Possibly AI-assisted insights
+- Updating rules
 
-👉 That’s how tools stay relevant.
+- Possibly AI-assisted insights
 
 🔹 5. Clean & Efficient Code
 
@@ -176,9 +169,13 @@ Possibly AI-assisted insights
 This is what separates:
 
 A script
+
 vs
 
+A maintainable system
+
 🧾 Summary
+
 In summary, GateKeeper is designed to validate and enforce API security by ensuring that only authorized and properly structured requests are accepted while identifying weaknesses in authentication, authorization, input handling, and system behavior.
 By combining software quality assurance practices with cybersecurity principles, GateKeeper demonstrates how APIs can be tested not only for functionality, but for resilience, reliability, and security in real-world scenarios.
 In summary, GateKeeper is designed to validate and enforce API security by ensuring that only authorized and properly structured requests are accepted while identifying weaknesses in authentication, authorization, input handling, and system behavior.
