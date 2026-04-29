@@ -65,16 +65,24 @@ Ensures that legitimate requests are not incorrectly rejected, maintaining a bal
 The first phase of GateKeeper includes:
 
 ✅ Valid endpoint request (expected success – 200 OK)
+
 ✅ Valid resource creation (expected success – 201 Created)
+
 ❌ Invalid endpoint request (expected failure – 404 Not Found)
+
 🔐 Missing or invalid authentication (expected failure – 401 Unauthorized)
+
 🚫 Forbidden access (future RBAC validation – 403 Forbidden)
+
 ⚠️ Invalid or malformed input (expected failure – 400 Bad Request)
+
 🚨 Unexpected system failure (error detection – 500 Internal Server Error)
+
 🛠️ Technology Stack
 Python
 pytest
 requests
+
 🌐 Test Environment
 
 GateKeeper uses a public API for demonstration and testing:
@@ -88,15 +96,23 @@ This allows for safe, controlled testing without interacting with production sys
 Planned improvements include:
 
 🔐 Advanced authentication testing (token handling, expiration)
-🚪 Role-Based Access Control (RBAC) Testing
-Validate that users with different roles (e.g., user, admin) are restricted to appropriate resources and actions
-Test unauthorized access attempts and privilege escalation scenarios
-🔁 Rate limiting and abuse detection tests
-🧪 Custom API simulation (locally hosted vulnerable API)
-🔄 Integration with CI/CD pipelines
-📊 Enhanced logging and reporting
-🧾 Summary
 
+🚪 Role-Based Access Control (RBAC) Testing
+
+- Validate that users with different roles (e.g., user, admin) are restricted to appropriate resources and actions
+- Test unauthorized access attempts and privilege escalation scenarios
+  
+🔁 Rate limiting and abuse detection tests
+
+🧪 Custom API simulation (locally hosted vulnerable API)
+
+🔄 Integration with CI/CD pipelines
+
+📊 Enhanced logging and reporting
+
+🧾 Summary
+In summary, GateKeeper is designed to validate and enforce API security by ensuring that only authorized and properly structured requests are accepted while identifying weaknesses in authentication, authorization, input handling, and system behavior.
+By combining software quality assurance practices with cybersecurity principles, GateKeeper demonstrates how APIs can be tested not only for functionality, but for resilience, reliability, and security in real-world scenarios.
 In summary, GateKeeper is designed to validate and enforce API security by ensuring that only authorized and properly structured requests are accepted while identifying weaknesses in authentication, authorization, input handling, and system behavior.
 
 By combining software quality assurance practices with cybersecurity principles, GateKeeper demonstrates how APIs can be tested not only for functionality, but for resilience, reliability, and security in real-world scenarios.
