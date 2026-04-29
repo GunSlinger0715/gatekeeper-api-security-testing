@@ -111,6 +111,7 @@ Planned improvements include:
 📊 Enhanced logging and reporting
 
 🛡️ GateKeeper Design Principles
+
 🔹 1. Ease of Use
 
 “Anyone with basic knowledge should be able to use it.”
