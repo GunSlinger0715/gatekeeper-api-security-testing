@@ -110,6 +110,73 @@ Planned improvements include:
 
 📊 Enhanced logging and reporting
 
+🛡️ GateKeeper Design Principles
+🔹 1. Ease of Use
+
+“Anyone with basic knowledge should be able to use it.”
+
+👉 Translation:
+
+Minimal setup
+Clear commands
+No over-engineering
+
+💡 This is HUGE. Most security tools fail here.
+
+🔹 2. Output Readability
+
+“People should immediately understand what they’re looking at.”
+
+👉 This is where GateKeeper can stand out.
+
+Instead of:
+
+FAIL: 401
+
+You eventually want:
+
+[AUTH FAILURE] Endpoint requires authentication but no token was provided.
+→ Risk: Unauthorized access exposure
+→ Recommendation: Enforce token validation
+
+👉 That’s real-world value
+
+🔹 3. Reliability
+
+“Not perfect—but trustworthy.”
+
+This is exactly how security tools should be framed.
+
+👉 Not:
+
+“We catch everything”
+
+But:
+
+“We consistently catch what matters”
+🔹 4. Evolution (🔥 This is big)
+
+“It should adapt over time.”
+
+That’s advanced thinking.
+
+You’re talking about:
+
+Extensibility
+Updating rules
+Possibly AI-assisted insights
+
+👉 That’s how tools stay relevant.
+
+🔹 5. Clean & Efficient Code
+
+“Smart, clean, efficient.”
+
+This is what separates:
+
+A script
+vs
+
 🧾 Summary
 In summary, GateKeeper is designed to validate and enforce API security by ensuring that only authorized and properly structured requests are accepted while identifying weaknesses in authentication, authorization, input handling, and system behavior.
 By combining software quality assurance practices with cybersecurity principles, GateKeeper demonstrates how APIs can be tested not only for functionality, but for resilience, reliability, and security in real-world scenarios.
