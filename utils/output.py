@@ -1,0 +1,20 @@
+def print_result(endpoint, method, status_code, expected, passed):
+    if passed:
+        print(f"[PASS] {method} {endpoint} → {status_code} | {get_status_message(status_code)}")
+    else:
+        print(f"[FAIL] {method} {endpoint} → {status_code}")
+        print(f"       Expected: {expected}")
+        print(f"       Reason: {get_status_message(status_code)}")
+
+
+def get_status_message(status_code):
+    messages = {
+        200: "OK - Request successful",
+        201: "Created - Resoure created successfully",
+        400: "Bad Request - Invalid input",
+        401: "Unauthorized - Authentication required",
+        403: "Forbidden - Access denied",
+        404: "Not Found - Resource does not exist",
+        500: "Server Error - Internal issue"
+    }
+    return messages.get(status_code, "Unknown response")

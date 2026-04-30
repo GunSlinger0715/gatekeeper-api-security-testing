@@ -2,13 +2,20 @@
 # Endpoint Tests
 # ---------------------------
 
+from utils.output import print_result
+
 class TestEndpoints:
 
     def test_get_post_returns_200(self, api_client):
         """Verify valid endpoint returns 200 OK"""
         response = api_client.get("/posts/1")
 
-        assert response.status_code == 200
+        passed = response.status_code == 200
+
+        print_result("/post/1", "GET", response.status_code, 200, passed)
+
+        assert passed
+
         data = response.json()
         assert data["id"] == 1
 
@@ -17,7 +24,11 @@ class TestEndpoints:
         """Verify invalid endpoint returns 404 Not Found"""
         response = api_client.get("/invalid-endpoint")
 
-        assert response.status_code == 404
+        passed = response.status_code == 404
+
+        print_result("/invalid-endpoint", "GET", response.status_code, 404, passed)
+
+        assert passed
 
 
 # ---------------------------
