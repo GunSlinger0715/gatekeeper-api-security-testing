@@ -10,7 +10,9 @@ It combines traditional QA validation with lightweight security checks to help t
 🎨 Color-coded terminal results
 🔐 Data exposure detection (sensitive fields in responses)
 🛡️ Information leakage detection (headers like Server, X-Powered-By)
+
 🔹 Example Output
+
 [PASS] GET /post/1 → 200 | OK - Request successful
 
 [WARNING] GET /post/1 - Potential information leakage detected:
