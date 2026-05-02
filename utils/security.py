@@ -25,13 +25,15 @@ def check_data_exposure(response):
         if field in data_str:
             findings.append(f"Sensitive field detected: {field}")
 
-    # 🔎 Header checks (basic)
+def check_info_leakage(response):
+    findings = []
+
     headers = response.headers
 
     if "server" in headers:
         findings.append(f"Header exposed: Server = {headers['server']}")
 
-    if "x-powered-by" in headers:
+    if "x-powered-by" in headers: 
         findings.append(f"Header exposed: X-Powered-By = {headers['x-powered-by']}")
 
     return findings

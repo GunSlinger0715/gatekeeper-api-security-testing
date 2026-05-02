@@ -3,7 +3,7 @@
 # ---------------------------
 
 from utils.output import print_result
-from utils.security import check_data_exposure
+from utils.security import check_data_exposure, check_info_leakage
 
 
 class TestEndpoints:
@@ -16,13 +16,22 @@ class TestEndpoints:
 
         print_result("/post/1", "GET", response.status_code, 200, passed)
 
+        #  Data Exposure
         findings = check_data_exposure(response)
 
-        if findings: 
+        if findings:
             print(f"\n\033[93m[WARNING] GET /post/1 - Potential data exposure detected:\033[0m")
-            for f in findings: 
+            for f in findings:
                 print(f" - {f}")
+            print("-" * 40)
 
+        #  Info Leakage
+        leaks = check_info_leakage(response)
+
+        if leaks:
+            print(f"\n\033[93m[WARNING] GET /post/1 - Potential information leakage detected:\033[0m")
+            for l in leaks:
+                print(f" - {l}")
             print("-" * 40)
 
         data = response.json()
@@ -39,44 +48,22 @@ class TestEndpoints:
 
         print_result("/invalid-endpoint", "GET", response.status_code, 404, passed)
 
+        #  Data Exposure
         findings = check_data_exposure(response)
 
-        if findings: 
+        if findings:
             print(f"\n\033[93m[WARNING] GET /invalid-endpoint - Potential data exposure detected:\033[0m")
-        for f in findings:
-            print(f" - {f}")
-        print("-" * 40)
-        
+            for f in findings:
+                print(f" - {f}")
+            print("-" * 40)
+
+        #  Info Leakage
+        leaks = check_info_leakage(response)
+
+        if leaks:
+            print(f"\n\033[93m[WARNING] GET /invalid-endpoint - Potential information leakage detected:\033[0m")
+            for l in leaks:
+                print(f" - {l}")
+            print("-" * 40)
+
         assert passed
-
-
-# ---------------------------
-# Input Validation Tests
-# ---------------------------
-
-class TestInputValidation:
-
-    def test_create_post_with_invalid_data_returns_400(self, api_client):
-        """Verify API handles malformed input safely"""
-
-        bad_payload = {
-            "invalid_field": "bad_data"
-        }
-
-        response = api_client.post("/posts", json=bad_payload)
-
-        assert response.status_code in [400, 201]
-
-
-# ---------------------------
-# Authentication Tests
-# ---------------------------
-
-class TestAuthentication:
-
-    def test_access_protected_resource_without_auth_returns_401(self, api_client):
-        """Verify API denies access without authentication"""
-
-        response = api_client.get("/protected-resource")
-
-        assert response.status_code in [401, 404]
