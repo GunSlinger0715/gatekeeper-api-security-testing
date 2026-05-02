@@ -36,17 +36,26 @@ It combines traditional QA validation with lightweight security checks to help t
 
 GateKeeper was built to bridge the gap between:
 
-QA testers who validate functionality
-Security engineers who look for vulnerabilities
+    QA testers who validate functionality
+    
+    Security engineers who look for vulnerabilities
 
 It provides clear, readable output that helps identify both correctness and potential security concerns in API responses.
 
 🔹 Tech Stack
+
 Python 3
+
 Pytest
+
 🔹 Future Enhancements
-Header integrity testing
-Token anomaly detection
-Schema validation
-Config-based scanning (JSON/YAML)
-CLI interface
+    
+    Header integrity testing
+    
+    Token anomaly detection
+    
+    Schema validation
+
+    Config-based scanning (JSON/YAML)
+
+    CLI interface
