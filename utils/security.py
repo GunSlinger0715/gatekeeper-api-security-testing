@@ -10,6 +10,8 @@ def check_data_exposure(response):
     except Exception:
         data_str = ""
 
+    return findings
+
     # 🔐 Sensitive fields (v1 scope)
     sensitive_fields = [
         "password",
@@ -25,6 +27,8 @@ def check_data_exposure(response):
         if field in data_str:
             findings.append(f"Sensitive field detected: {field}")
 
+    return findings
+
 def check_info_leakage(response):
     findings = []
 
@@ -37,3 +41,44 @@ def check_info_leakage(response):
         findings.append(f"Header exposed: X-Powered-By = {headers['x-powered-by']}")
 
     return findings
+
+REQUIRED_SECURITY_HEADERS = {
+    "Strict-Transport-Security": "max-age=",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": ["DENY", "SAMEORIGIN"],
+    "Content-Security-Policy": None,
+    "Referrer-Policy": None,
+    "Permissions-Policy": None
+}
+
+def check_header_integrity(response):
+    results = {
+        "missing_headers": [],
+        "misconfigured_headers": [],
+        "valid_headers": []
+    }
+
+    headers = response.headers
+
+    for header, expected in REQUIRED_SECURITY_HEADERS.items():
+        value = headers.get(header)
+
+        if not value:
+            results["missing_headers"].append(header)
+            continue
+
+        if expected:
+            if isinstance(expected, list):
+                if not any(opt in value for opt in expected):
+                    results["misconfigured_headers"].append((header, value))
+                else:
+                    results["valid_headers"].append(header)
+            else:
+                if expected not in value:
+                    results["misconfigured_headers"].append((header, value))
+                else:
+                    results["valid_headers"].append(header)
+        else:
+            results["valid_headers"].append(header)
+
+    return results
