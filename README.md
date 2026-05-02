@@ -5,11 +5,17 @@ GateKeeper is a Python-based API testing framework designed to validate endpoint
 It combines traditional QA validation with lightweight security checks to help testers and developers quickly identify problems in API responses.
 
 🔹 Features
+
 ✅ Endpoint validation (200, 404, etc.)
+
 🎯 Human-readable PASS/FAIL output
+
 🎨 Color-coded terminal results
+
 🔐 Data exposure detection (sensitive fields in responses)
+
 🛡️ Information leakage detection (headers like Server, X-Powered-By)
+
 
 🔹 Example Output
 
