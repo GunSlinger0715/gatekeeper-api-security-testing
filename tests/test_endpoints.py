@@ -3,6 +3,8 @@
 # ---------------------------
 
 from utils.output import print_result
+from utils.security import check_data_exposure
+
 
 class TestEndpoints:
 
@@ -14,9 +16,18 @@ class TestEndpoints:
 
         print_result("/post/1", "GET", response.status_code, 200, passed)
 
-        assert passed
+        findings = check_data_exposure(response)
+
+        if findings: 
+            print(f"\n\033[93m[WARNING] GET /post/1 - Potential data exposure detected:\033[0m")
+            for f in findings: 
+                print(f" - {f}")
+
+            print("-" * 40)
 
         data = response.json()
+
+        assert passed
         assert data["id"] == 1
 
 
@@ -28,6 +39,14 @@ class TestEndpoints:
 
         print_result("/invalid-endpoint", "GET", response.status_code, 404, passed)
 
+        findings = check_data_exposure(response)
+
+        if findings: 
+            print(f"\n\033[93m[WARNING] GET /invalid-endpoint - Potential data exposure detected:\033[0m")
+        for f in findings:
+            print(f" - {f}")
+        print("-" * 40)
+        
         assert passed
 
 
