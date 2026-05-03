@@ -1,3 +1,6 @@
+import json
+
+
 # Risk level coloring
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -190,3 +193,14 @@ def print_summary():
     for result in sorted_results:
         color = get_risk_color(result["risk"])
         print(f"{result['method']:<10}{result['endpoint']:<20}{result['score']:<10}{color}{result['risk']}{RESET}")
+    export_results_to_json()    
+
+
+#Output to JSON
+def export_results_to_json(filename="gatekeeper_results.json"):
+    with open(filename, "w") as f:
+        json.dump(results_summary, f, indent=4)
+
+    print(f"\n📁 Results exported to {filename}")
+
+    

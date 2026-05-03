@@ -1,0 +1,14 @@
+[
+    {
+        "method": "GET",
+        "endpoint": "/post/1",
+        "score": 55,
+        "risk": "HIGH RISK"
+    },
+    {
+        "method": "GET",
+        "endpoint": "/invalid-endpoint",
+        "score": 55,
+        "risk": "HIGH RISK"
+    }
+]

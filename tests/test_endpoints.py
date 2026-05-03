@@ -70,5 +70,7 @@ class TestEndpoints:
 
 from utils.output import print_summary
 
+print("DEBUG: print_summary() is running")
+
 def teardown_module(module):
     print_summary()
