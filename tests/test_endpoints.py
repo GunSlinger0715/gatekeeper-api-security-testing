@@ -2,7 +2,7 @@
 # Endpoint Tests
 # ------------------------------------
 
-from utils.output import print_result
+from utils.output import print_result, run_security_checks
 from utils.security import (
     check_data_exposure,
     check_info_leakage,
@@ -20,49 +20,12 @@ class TestEndpoints:
         passed = response.status_code == 200
         print_result("/post/1", "GET", response.status_code, 200, passed)
 
-        # ------------------------
-        # Data Exposure
-        # ------------------------
-        findings = check_data_exposure(response)
+        run_security_checks(response, "GET /post/1")
 
-        if findings:
-            print(f"\n\033[93m[WARNING] GET /post/1 - Potential data exposure detected:\033[0m")
-            for f in findings:
-                print(f"  - {f}")
-            print("-" * 40)
-
-        # ------------------------
-        # Info Leakage
-        # ------------------------
-        leaks = check_info_leakage(response)
-
-        if leaks:
-            print(f"\n\033[93m[WARNING] GET /post/1 - Potential information leakage detected:\033[0m")
-            for l in leaks:
-                print(f"  - {l}")
-            print("-" * 40)
-
-        # ------------------------
-        # Header Integrity
-        # ------------------------
-        header_results = check_header_integrity(response)
-
-        if header_results["missing_headers"]:
-            print("\n\033[91m[FAIL] Missing Security Headers:\033[0m")
-            for h in header_results["missing_headers"]:
-                print(f"  - {h}")
-
-        if header_results["misconfigured_headers"]:
-            print("\n\033[93m[WARN] Misconfigured Headers:\033[0m")
-            for h, val in header_results["misconfigured_headers"]:
-                print(f"  - {h}: {val}")
-
-        if header_results["valid_headers"]:
-            print("\n\033[92m[PASS] Valid Security Headers:\033[0m")
-            for h in header_results["valid_headers"]:
-                print(f"  - {h}")
-
-        print("-" * 40)
+        #functional assertions
+        data = response.json()
+        assert passed
+        assert data["id"] == 1
 
         # Functional assertions
         data = response.json()
@@ -78,16 +41,15 @@ class TestEndpoints:
         passed = response.status_code == 404
         print_result("/invalid-endpoint", "GET", response.status_code, 404, passed)
 
+        # Use unified runner
+        run_security_checks(response, "GET /invalid-endpoint")
+
+        assert passed
+
         # ------------------------
         # Info Leakage
         # ------------------------
-        leaks = check_info_leakage(response)
-
-        if leaks:
-            print(f"\n\033[93m[WARNING] GET /invalid-endpoint - Potential information leakage detected:\033[0m")
-            for l in leaks:
-                print(f"  - {l}")
-            print("-" * 40)
+        print("-" * 40)
 
         # ------------------------
         # Header Integrity
@@ -106,5 +68,7 @@ class TestEndpoints:
 
         print("-" * 40)
 
-        # Functional assertion
-        assert passed
+from utils.output import print_summary
+
+def teardown_module(module):
+    print_summary()
