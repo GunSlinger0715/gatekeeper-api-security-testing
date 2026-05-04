@@ -1,3 +1,7 @@
+# imports
+import re
+
+
 # utils/security.py
 
 def check_data_exposure(response):
@@ -82,3 +86,52 @@ def check_header_integrity(response):
             results["valid_headers"].append(header)
 
     return results
+
+#Sensittive field detection
+def check_sensitive_fields(response):
+    findings = []
+
+    try: 
+        data = response.json()
+    except Exception:
+            return findings #Not JSON, skip
+    
+    data_str = str(data)
+
+    patterns = {
+        "Email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
+        "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
+        "Token": r"[A-Za-z0-9\-\._]{12,}",
+        "Password Field": r'"password"\s*:\s*".*?"',
+    }
+
+    for label, pattern in patterns.items():
+        matches = re.findall(pattern, data_str)
+
+        for match in matches:
+            findings.append(f"{label} detected: {match}")
+
+            if label == "Token":
+                issues = analyze_token(match)
+                for issue in issues:
+                    findings.append(f"⚠️ Token anomaly: {issue}")
+
+    return findings
+
+#Token Anomaly Detection
+def analyze_token(token):
+    issues = []
+
+    # Length checks
+    if len(token) < 20:
+        issues.append("Token too short")
+
+    if len(token) > 500:
+        issues.append("Token unusually long")
+
+    # JWT structure check (header.payload.signature)
+    parts = token.split(".")
+    if len(parts) != 3:
+        issues.append("Invalid JWT structure")
+
+    return issues

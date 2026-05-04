@@ -2,8 +2,8 @@
     {
         "method": "GET",
         "endpoint": "/post/1",
-        "score": 55,
-        "risk": "HIGH RISK"
+        "score": 0,
+        "risk": "CRITICAL RISK"
     },
     {
         "method": "GET",

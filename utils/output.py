@@ -1,5 +1,10 @@
 import json
-
+from utils.security import (
+    check_data_exposure,
+    check_info_leakage,
+    check_header_integrity,
+    check_sensitive_fields  
+)
 
 # Risk level coloring
 GREEN = "\033[92m"
@@ -81,40 +86,32 @@ def print_header_integrity(results):
 
     print("-" * 40)
 
-def calculate_security_score(findings, leaks, header_results):
+
+
+def calculate_security_score(findings, leaks, header_results, sensitive):
     score = 100
 
-    # Data Exposure (HIGH impact)
+    # Data Exposure (HIGH)
     if findings:
         score -= len(findings) * 15
 
-    # Info Leakage (MEDIUM impact)
+    #Info Leakage (MEDIUM)
     if leaks:
         score -= len(leaks) * 10
+    
+    #Sensitive data (VERY HIGH)
+    if sensitive: 
+        score -= len(sensitive) * 20
+    
+    # Token anomaly (EXTRA penalty)
+    if any ("Token anomaly" in f for f in sensitive):
+        score -= 10
 
-    # Missing Headers (MEDIUM/HIGH)
+    # Missing Headers (MEDIUM)
     missing = header_results.get("missing_headers", [])
     score -= len(missing) * 5
 
-    # Misconfigured Headers (LOW/MEDIUM)
-    misconfigured = header_results.get("misconfigured_headers", [])
-    score -= len(misconfigured) * 3
-
-    # Prevent negative scores
-    return max(score, 0)
-
-def calculate_security_score(findings, leaks, header_results):
-    score = 100
-
-    if findings:
-        score -= len(findings) * 15
-
-    if leaks:
-        score -= len(leaks) * 10
-
-    missing = header_results.get("missing_headers", [])
-    score -= len(missing) * 5
-
+    #Misconfigured headers (LOW)
     misconfigured = header_results.get("misconfigured_headers", [])
     score -= len(misconfigured) * 3
 
@@ -155,7 +152,13 @@ def run_security_checks(response, endpoint):
     header_results = check_header_integrity(response)
     print_header_integrity(header_results)
 
-    score = calculate_security_score(findings, leaks, header_results)
+    # ----------------------------
+    # Sensitive Field Detection
+    # ----------------------------
+    sensitive = check_sensitive_fields(response)
+    print_sensitive_findings(sensitive, endpoint)
+
+    score = calculate_security_score(findings, leaks, header_results, sensitive)
     print_security_score(score, endpoint)
 
     results_summary.append({
@@ -203,4 +206,13 @@ def export_results_to_json(filename="gatekeeper_results.json"):
 
     print(f"\n📁 Results exported to {filename}")
 
-    
+#Sensitive Field Output
+YELLOW = "\033[93m"
+
+def print_sensitive_findings(findings, endpoint):
+    if findings:
+        print(f"\n{YELLOW}[WARNING] {endpoint} - Sensitive data detected:\033[0m")
+        for f in findings:
+            print(f" - {f}")
+        print("-" * 40)   
+
