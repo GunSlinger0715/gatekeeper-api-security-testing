@@ -44,6 +44,12 @@ def check_info_leakage(response):
     if "x-powered-by" in headers: 
         findings.append(f"Header exposed: X-Powered-By = {headers['x-powered-by']}")
 
+    strength_issues = validate_header_strength(headers)
+
+    if strength_issues:
+        for issue in strength_issues:
+            findings.append(f"Header strength issue: {issue}")
+
     return findings
 
 REQUIRED_SECURITY_HEADERS = {
@@ -84,6 +90,11 @@ def check_header_integrity(response):
                     results["valid_headers"].append(header)
         else:
             results["valid_headers"].append(header)
+    
+        strength_issues = validate_header_strength(headers)
+
+        for issue in strength_issues: 
+            results["misconfigured_headers"].append(issue)
 
     return results
 
@@ -101,7 +112,7 @@ def check_sensitive_fields(response):
     patterns = {
         "Email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
         "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
-        "Token": r"[A-Za-z0-9\-\._]{12,}",
+        "Token": r"\b[A-Za-z0-9\-\._]{20,}\b",
         "Password Field": r'"password"\s*:\s*".*?"',
     }
 
@@ -114,7 +125,7 @@ def check_sensitive_fields(response):
             if label == "Token":
                 issues = analyze_token(match)
                 for issue in issues:
-                    findings.append(f"⚠️ Token anomaly: {issue}")
+                    findings.append(f"⚠️ Token anomaly detected ({issue})")
 
     return findings
 
@@ -134,4 +145,82 @@ def analyze_token(token):
     if len(parts) != 3:
         issues.append("Invalid JWT structure")
 
+def detect_and_analyze_tokens(data):
+    findings = []
+
+    token_pattern = re.compile(r'\b[A-Za-z0-9\-_\.]{20,}\b')
+
+    for key, value in data.items():
+        if not isinstance(value, str):
+            continue
+
+        matches = token_pattern.findall(value)
+
+        for token in matches:
+            issues = analyze_token(token)
+
+            for issue in issues:
+                findings.append(f"{issue} in field '{key}'")
+
+
     return issues
+
+#Header Strength Validation
+def validate_header_strength(headers):
+    issues = []
+
+    # --- Content-Security-Policy ---
+    csp = headers.get("Content-Security-Policy")
+    if csp:
+        if "*" in csp:
+            issues.append("[WARNING] CSP is too permissive (contains '*')")
+        if "unsafe-inline" in csp:
+            issues.append("[WARNING] CSP allows unsafe-inline (XSS risk)")
+
+    # --- Strict-Transport-Security ---
+    hsts = headers.get("Strict-Transport-Security")
+    if hsts:
+        if "includeSubDomains" not in hsts:
+            issues.append("[WARNING] HSTS missing includeSubDomains")
+        if "max-age" not in hsts:
+            issues.append("[WARNING] HSTS missing max-age")
+
+    # --- X-Frame-Options ---
+    xfo = headers.get("X-Frame-Options")
+    if xfo:
+        if xfo not in ["DENY", "SAMEORIGIN"]:
+            issues.append(f"[WARNING] Weak X-Frame-Options value: {xfo}")
+
+    return issues
+
+#Token Anomaly Detection
+
+def detect_token_anomalies(data):
+    findings = []
+
+    # Regex for token-like strings (long random strings)
+    token_pattern = re.compile(r'\b[A-Za-z0-9\-_]{20,}\b')
+
+    for key, value in data.items():
+        if not isinstance(value, str):
+            continue
+
+        matches = token_pattern.findall(value)
+
+        for token in matches:
+            
+            # --- Length Check ---
+            if len(token) > 100:
+                findings.append(f"[WARNING] Suspiciously long token detected in '{key}'")
+
+            # --- JWT Structure Check ---
+            if token.count('.') == 2:
+                parts = token.split('.')
+                if all(len(part) > 0 for part in parts):
+                    findings.append(f"[INFO] JWT-like token detected in '{key}'")
+
+            # --- Weak / Likely False Positive ---
+            if token.lower() in ["password", "username", "admin"]:
+                continue
+
+    return findings

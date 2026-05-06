@@ -46,31 +46,4 @@ class TestEndpoints:
 
         assert passed
 
-        # ------------------------
-        # Info Leakage
-        # ------------------------
-        print("-" * 40)
-
-        # ------------------------
-        # Header Integrity
-        # ------------------------
-        header_results = check_header_integrity(response)
-
-        if header_results["missing_headers"]:
-            print("\n\033[91m[FAIL] Missing Security Headers:\033[0m")
-            for h in header_results["missing_headers"]:
-                print(f"  - {h}")
-
-        if header_results["misconfigured_headers"]:
-            print("\n\033[93m[WARN] Misconfigured Headers:\033[0m")
-            for h, val in header_results["misconfigured_headers"]:
-                print(f"  - {h}: {val}")
-
-        print("-" * 40)
-
 from utils.output import print_summary
-
-print("DEBUG: print_summary() is running")
-
-def teardown_module(module):
-    print_summary()
