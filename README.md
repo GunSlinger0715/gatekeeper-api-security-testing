@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/GateKeeper Heimdal.png" width="100%">
+</p>
+
 # Project GateKeeper
 
 Project GateKeeper is a modular API security analysis framework designed to combine deterministic API validation with structured security analysis and severity-based risk scoring.
