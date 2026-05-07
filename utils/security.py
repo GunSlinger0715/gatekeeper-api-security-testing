@@ -29,7 +29,11 @@ def check_data_exposure(response):
     # Scan for sensitive fields
     for field in sensitive_fields:
         if field in data_str:
-            findings.append(f"Sensitive field detected: {field}")
+            findings.append({
+                "finding": "Sensitive Data Exposure",
+                "severity": "CRITICAL",
+                "details": f"Sensitive field detected: {field}"
+            })
 
     return findings
 
