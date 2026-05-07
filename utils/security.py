@@ -121,9 +121,24 @@ def check_header_integrity(response):
         for issue in strength_issues: 
             results["misconfigured_headers"].append(issue)
 
-    return results
 
-#Sensittive field detection
+    return results        
+
+def check_unauthorized_access(response):
+
+    findings = []
+
+    if response.status_code == 200:
+
+        findings.append({
+            "finding": "Unauthorized Access Allowed",
+            "severity": "HIGH",
+            "details": "Endpoint accessible without authentication"
+        })            
+
+    return findings
+
+# Sensitive field detection
 def check_sensitive_fields(response):
     findings = []
 

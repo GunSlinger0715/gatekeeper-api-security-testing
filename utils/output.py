@@ -3,7 +3,8 @@ from utils.security import (
     check_data_exposure,
     check_info_leakage,
     check_header_integrity,
-    check_sensitive_fields  
+    check_sensitive_fields, 
+    check_unauthorized_access
 )
 
 # Risk level coloring
@@ -180,6 +181,17 @@ def run_security_checks(response, endpoint):
 
     header_results = check_header_integrity(response)
     print_header_integrity(header_results)
+
+    unauthorized = check_unauthorized_access(response)
+
+    if unauthorized:
+
+        print("\n\033[91m[FAIL] Unauthorized Access Detected:\033[0m")
+
+    for finding in unauthorized:
+        print(f" - [{finding['severity']}] {finding['details']}")
+
+    print("-" * 40)
 
     # ----------------------------
     # Sensitive Field Detection
