@@ -2,6 +2,8 @@ import re
 import base64
 import json
 from token_analysis import analyze_tokens
+import math
+from collections import Counter
 
 
 TOKEN_PATTERNS = [
@@ -68,6 +70,10 @@ def analyze_tokens(text):
 
     for token in tokens:
         results.append(classify_token(token))
+
+        strength_findings = analyze_token_strength(token)
+
+        results.extend(strength_findings)
 
     return results
 
@@ -169,6 +175,78 @@ def decode_base64url(data):
             "finding": "Valid JWT Structure",
             "severity": "INFO",
             "details": "JWT structure appears valid"
+        })
+
+    return findings
+
+# Validate JWT 
+def calculate_entropy(data):
+    """
+    Calculate Shannon entropy of a string.
+    """
+
+    if not data:
+        return 0
+
+    counter = Counter(data)
+    length = len(data)
+
+    entropy = -sum(
+        (count / length) * math.log2(count / length)
+        for count in counter.values()
+    )
+
+    return round(entropy, 2)
+
+def analyze_token_strength(token):
+    """
+    Analyze token randomness and detect weak patterns.
+    """
+
+    findings = []
+
+    entropy = calculate_entropy(token)
+
+    # Weak entropy detection
+    if entropy < 3.0:
+        findings.append({
+            "finding": "Weak Token Entropy",
+            "severity": "MEDIUM",
+            "details": f"Token entropy is low ({entropy})"
+        })
+
+    # Very short token
+    if len(token) < 20:
+        findings.append({
+            "finding": "Short Token Length",
+            "severity": "LOW",
+            "details": f"Token length is only {len(token)} characters"
+        })
+
+    # Numeric-only token
+    if token.isdigit():
+        findings.append({
+            "finding": "Numeric-Only Token",
+            "severity": "MEDIUM",
+            "details": "Token contains only numeric characters"
+        })
+
+    # Repeated character detection
+    unique_chars = len(set(token))
+
+    if unique_chars <= 4 and len(token) > 12:
+        findings.append({
+            "finding": "Low Character Variability",
+            "severity": "MEDIUM",
+            "details": "Token contains very limited character diversity"
+        })
+
+    # Success case
+    if not findings:
+        findings.append({
+            "finding": "Strong Token Characteristics",
+            "severity": "INFO",
+            "details": f"Token entropy appears strong ({entropy})"
         })
 
     return findings
