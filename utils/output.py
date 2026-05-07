@@ -127,8 +127,8 @@ def calculate_security_score(findings, leaks, header_results, sensitive):
         score -= 10
 
     # Missing Headers (MEDIUM)
-    missing = header_results.get("missing_headers", [])
-    score -= len(missing) * 5
+    #missing = header_results.get("missing_headers", [])
+    #score -= len(missing) * 5
 
     #Misconfigured headers (LOW)
     misconfigured = header_results.get("misconfigured_headers", [])
@@ -176,6 +176,8 @@ def run_security_checks(response, endpoint):
     # ----------------------------
     sensitive = check_sensitive_fields(response)
     print_sensitive_findings(sensitive, endpoint)
+
+    structured_findings = header_results.get("findings", [])
 
     score = calculate_security_score(findings, leaks, header_results, sensitive)
     print_security_score(score, endpoint)
