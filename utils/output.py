@@ -86,10 +86,29 @@ def print_header_integrity(results):
 
     print("-" * 40)
 
+#SEVERITY WEIGHTS
+SEVERITY_WEIGHTS = {
+    "INFO": 0,
+    "LOW": 5,
+    "MEDIUM": 15,
+    "HIGH": 30,
+    "CRITICAL": 50
+}
 
 
 def calculate_security_score(findings, leaks, header_results, sensitive):
     score = 100
+
+    # Structured finding severity scoring
+    for finding in sensitive:
+
+        if isinstance(finding, dict):
+
+            severity = finding.get("severity", "INFO")
+
+            deduction = SEVERITY_WEIGHTS.get(severity, 0)
+
+            score -= deduction
 
     # Data Exposure (HIGH)
     if findings:

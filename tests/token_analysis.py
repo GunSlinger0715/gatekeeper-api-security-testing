@@ -73,7 +73,7 @@ def analyze_tokens(text):
 
         strength_findings = analyze_token_strength(token)
 
-        results.extend(strength_findings)
+        results.append(strength_findings)
 
     return results
 
@@ -91,7 +91,7 @@ def decode_base64url(data):
     except Exception: 
         return None
     
-   def validate_jwt(token):
+def validate_jwt(token):
     """
     Validate JWT structure and detect common security issues.
     """
