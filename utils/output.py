@@ -51,20 +51,28 @@ def get_status_message(status_code):
     }
     return messages.get(status_code, "Unknown response")
 
+#Structured Renderer
+def print_structured_findings(findings):
+    for finding in findings: 
+
+        if isinstance(finding, dict):
+            print(f" - [{finding['severity']}] {finding['details']}")
+        
+        else: 
+            print(f" - {finding}")
+
 
 def print_data_exposure(findings, endpoint):
     if findings:
         print(f"\n\033[93m[WARNING] {endpoint} - Potential data exposure detected:\033[0m")
-        for f in findings:
-            print(f"  - {f}")
+        print_structured_findings(findings)
         print("-" * 40)
 
 
 def print_info_leakage(leaks, endpoint):
     if leaks:
         print(f"\n\033[93m[WARNING] {endpoint} - Potential information leakage detected:\033[0m")
-        for l in leaks:
-            print(f"  - {l}")
+        print_structured_findings(leaks)
         print("-" * 40)
 
 
