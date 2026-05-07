@@ -138,14 +138,16 @@ def calculate_security_score(findings, leaks, header_results, sensitive):
 
 
 def get_risk_level(score):
-    if score >= 90:
+    if score >= 95:
         return "LOW RISK"
-    elif score >= 70:
+
+    elif score >= 75:
         return "MEDIUM RISK"
+
     elif score >= 50:
         return "HIGH RISK"
-    else:
-        return "CRITICAL RISK"
+
+    return "CRITICAL"
 
 
 def print_security_score(score, endpoint):

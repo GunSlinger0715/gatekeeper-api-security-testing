@@ -39,16 +39,28 @@ def check_info_leakage(response):
     headers = response.headers
 
     if "server" in headers:
-        findings.append(f"Header exposed: Server = {headers['server']}")
+        findings.append({
+            "finding": "Information Leakage",
+            "severity": "MEDIUM",
+            "details": f"Server header exposed: {headers['server']}"
+        })
 
     if "x-powered-by" in headers: 
-        findings.append(f"Header exposed: X-Powered-By = {headers['x-powered-by']}")
+        findings.append({
+            "finding": "Information Leakage",
+            "severity": "MEDIUM",
+            "details": f"X-Powered-By header exposed: {headers['x-powered-by']}"
+        })
 
     strength_issues = validate_header_strength(headers)
 
     if strength_issues:
         for issue in strength_issues:
-            findings.append(f"Header strength issue: {issue}")
+            findings.append({
+                "finding": "Weak Security Header Configuration",
+                "severity": "LOW",
+                "details": issue
+        })
 
     return findings
 
