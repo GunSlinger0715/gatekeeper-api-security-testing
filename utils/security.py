@@ -65,7 +65,8 @@ def check_header_integrity(response):
     results = {
         "missing_headers": [],
         "misconfigured_headers": [],
-        "valid_headers": []
+        "valid_headers": [],
+        "findings": []
     }
 
     headers = response.headers
@@ -74,7 +75,15 @@ def check_header_integrity(response):
         value = headers.get(header)
 
         if not value:
+
             results["missing_headers"].append(header)
+
+            results["findings"].append({
+                "finding": "Missing Security Header",
+                "severity": "HIGH",
+                "details": f"{header} header missing"
+            })
+
             continue
 
         if expected:
