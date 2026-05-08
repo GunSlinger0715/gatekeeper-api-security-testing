@@ -23,6 +23,9 @@ The framework blends traditional QA-style endpoint testing with lightweight secu
 - Missing security header detection
 - Misconfigured header analysis
 - Header strength validation
+- Unauthorized access detection
+- Trust-boundary validation
+- Missing authentication analysis
 
 ## Token Analysis
 - JWT structure validation
@@ -46,6 +49,7 @@ The framework blends traditional QA-style endpoint testing with lightweight secu
 # Architecture Highlights
 
 GateKeeper uses a modular architecture with centralized structured findings generation.
+The framework validates not only endpoint availability, but also secure endpoint behavior through trust-boundary analysis and structured security enforcement validation.
 
 ```python
 {
