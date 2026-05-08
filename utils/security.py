@@ -124,17 +124,19 @@ def check_header_integrity(response):
 
     return results        
 
-def check_unauthorized_access(response):
+def check_unauthorized_access(response, endpoint, protected_endpoints):
 
     findings = []
 
-    if response.status_code == 200:
+    if endpoint in protected_endpoints:  
 
-        findings.append({
-            "finding": "Unauthorized Access Allowed",
-            "severity": "HIGH",
-            "details": "Endpoint accessible without authentication"
-        })            
+            if response.status_code == 200:
+
+                findings.append({
+                    "finding": "Unauthorized Access Allowed",
+                    "severity": "HIGH",
+                    "details": "Protected endpoint accessible without authentication"
+                })
 
     return findings
 

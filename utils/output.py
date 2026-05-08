@@ -173,6 +173,7 @@ def print_security_score(score, endpoint):
 
 
 def run_security_checks(response, endpoint):
+
     findings = check_data_exposure(response)
     print_data_exposure(findings, endpoint)
 
@@ -182,7 +183,17 @@ def run_security_checks(response, endpoint):
     header_results = check_header_integrity(response)
     print_header_integrity(header_results)
 
-    unauthorized = check_unauthorized_access(response)
+    protected_endpoints = [
+        "GET /admin",
+        "GET /profile",
+        "GET /dashboard"
+    ]
+
+    unauthorized = check_unauthorized_access(
+        response,
+        endpoint,
+        protected_endpoints
+    )
 
     if unauthorized:
 
