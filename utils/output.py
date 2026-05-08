@@ -189,7 +189,7 @@ def run_security_checks(response, endpoint):
         "GET /dashboard"
     ]
 
-    unauthorized = check_unauthorized_access(
+    unauthorized, secure_behavior = check_unauthorized_access(
         response,
         endpoint,
         protected_endpoints
@@ -199,10 +199,19 @@ def run_security_checks(response, endpoint):
 
         print("\n\033[91m[FAIL] Unauthorized Access Detected:\033[0m")
 
-    for finding in unauthorized:
-        print(f" - [{finding['severity']}] {finding['details']}")
+        for finding in unauthorized:
+            print(f" - [{finding['severity']}] {finding['details']}")
 
-    print("-" * 40)
+        print("-" * 40)
+
+    if secure_behavior:
+
+        print("\n\033[92m[PASS] Secure Authorization Behavior Detected:\033[0m")
+
+        for behavior in secure_behavior:
+            print(f" - {behavior['details']}")
+
+        print("-" * 40)
 
     # ----------------------------
     # Sensitive Field Detection

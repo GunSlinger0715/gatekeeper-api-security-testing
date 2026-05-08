@@ -127,18 +127,25 @@ def check_header_integrity(response):
 def check_unauthorized_access(response, endpoint, protected_endpoints):
 
     findings = []
+    secure_behavior = []
 
     if endpoint in protected_endpoints:  
 
             if response.status_code == 200:
-
                 findings.append({
                     "finding": "Unauthorized Access Allowed",
                     "severity": "HIGH",
                     "details": "Protected endpoint accessible without authentication"
                 })
+            elif response.status_code in [401, 403]:
 
-    return findings
+                secure_behavior.append({
+                    "status": "PASS",
+                    "details": "Protected endpoint correctly denied unauthorized access"
+                })
+
+                
+    return findings, secure_behavior
 
 # Sensitive field detection
 def check_sensitive_fields(response):
