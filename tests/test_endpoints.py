@@ -46,4 +46,23 @@ class TestEndpoints:
 
         assert passed
 
+        #def test_protected_endpoint_requires_auth(self, api_client):
+        #    """Verify protected endpoint denies unauthorized access"""
+        #
+        #response = api_client.get("/invalid-endpoint")
+        #
+        #passed = response.status_code in [401, 403, 404]
+        #
+        #print_result(
+        #   "/protected",
+        #    "GET",
+        #    response.status_code,
+        #    "401/403",
+        #    passed
+        #)
+        #
+        #run_security_checks(response, "GET /invalid-endpoint")
+        #
+        #assert passed
+
 from utils.output import print_summary
