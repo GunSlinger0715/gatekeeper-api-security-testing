@@ -152,7 +152,7 @@ Planned future enhancements include:
 - Config-driven detection rules
 - Intelligent anomaly analysis
 
-## License
+# License
 
 This project is licensed under the MIT License.
 
