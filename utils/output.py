@@ -6,17 +6,13 @@ from utils.security import (
     check_sensitive_fields, 
     check_unauthorized_access
 )
+from security.scoring import (
+    calculate_security_score,
+    get_risk_level,
+    get_risk_color
+)
 
-# =========================================================
-# TERMINAL COLOR CONFIGURATION
-# =========================================================
-
-# Risk level coloring
-GREEN = "\033[92m"
-YELLOW = "\033[93m"
-RED = "\033[91m"
-RESET = "\033[0m"
-
+from security.scoring import GREEN, YELLOW, RED, RESET
 
 # =========================================================
 # GLOBAL RESULTS STORAGE
@@ -92,74 +88,6 @@ def print_header_integrity(results):
             print(f"  - {h}")
 
     print("-" * 40)
-
-# =========================================================
-# SECURITY SCORING ENGINE
-# =========================================================
-
-#SEVERITY WEIGHTS
-SEVERITY_WEIGHTS = {
-    "INFO": 0,
-    "LOW": 5,
-    "MEDIUM": 15,
-    "HIGH": 30,
-    "CRITICAL": 50
-}
-
-
-def calculate_security_score(findings, leaks, header_results, sensitive):
-    score = 100
-
-    # Structured finding severity scoring
-    for finding in sensitive:
-
-        if isinstance(finding, dict):
-
-            severity = finding.get("severity", "INFO")
-
-            deduction = SEVERITY_WEIGHTS.get(severity, 0)
-
-            score -= deduction
-
-    # Data Exposure (HIGH)
-    if findings:
-        score -= len(findings) * 15
-
-    #Info Leakage (MEDIUM)
-    if leaks:
-        score -= len(leaks) * 10
-    
-    #Sensitive data (VERY HIGH)
-    if sensitive: 
-        score -= len(sensitive) * 20
-    
-    # Token anomaly (EXTRA penalty)
-    if any ("Token anomaly" in f for f in sensitive):
-        score -= 10
-
-    # Missing Headers (MEDIUM)
-    #missing = header_results.get("missing_headers", [])
-    #score -= len(missing) * 5
-
-    #Misconfigured headers (LOW)
-    misconfigured = header_results.get("misconfigured_headers", [])
-    score -= len(misconfigured) * 3
-
-    return max(score, 0)
-
-
-def get_risk_level(score):
-    if score >= 95:
-        return "LOW RISK"
-
-    elif score >= 75:
-        return "MEDIUM RISK"
-
-    elif score >= 50:
-        return "HIGH RISK"
-
-    return "CRITICAL"
-
 
 def print_security_score(score, endpoint):
     risk = get_risk_level(score)
