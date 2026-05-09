@@ -27,6 +27,12 @@ The framework blends traditional QA-style endpoint testing with lightweight secu
 - Trust-boundary validation
 - Missing authentication analysis
 
+## Authorization Validation
+- Protected endpoint awareness
+- Contextual trust-boundary validation
+- Secure authorization behavior scaffolding
+- Unauthorized access detection architecture
+
 ## Token Analysis
 - JWT structure validation
 - Token anomaly detection
