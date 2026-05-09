@@ -12,7 +12,7 @@ from security.scoring import (
     get_risk_color
 )
 
-from security.scoring import GREEN, YELLOW, RED, RESET
+from config.colors import GREEN, YELLOW, RED, RESET
 
 # =========================================================
 # GLOBAL RESULTS STORAGE

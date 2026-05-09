@@ -1,12 +1,4 @@
-# =========================================================
-# TERMINAL COLOR CONFIGURATION
-# =========================================================
-
-# Risk level coloring
-GREEN = "\033[92m"
-YELLOW = "\033[93m"
-RED = "\033[91m"
-RESET = "\033[0m"
+from config.colors import GREEN, YELLOW, RED, RESET 
 
 # =========================================================
 # SECURITY SCORING ENGINE
