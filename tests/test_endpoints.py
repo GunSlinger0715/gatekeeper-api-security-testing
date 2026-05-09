@@ -15,22 +15,18 @@ class TestEndpoints:
     def test_get_post_returns_200(self, api_client):
         """Verify valid endpoint returns 200 OK"""
 
-        response = api_client.get("/posts/1")
+        response = api_client.get("/json")
 
         passed = response.status_code == 200
-        print_result("/post/1", "GET", response.status_code, 200, passed)
+        print_result("/json", "GET", response.status_code, 200, passed)
 
-        run_security_checks(response, "GET /post/1")
+        run_security_checks(response, "GET /json")
 
         #functional assertions
         data = response.json()
+        
         assert passed
-        assert data["id"] == 1
-
-        # Functional assertions
-        data = response.json()
-        assert passed
-        assert data["id"] == 1
+        assert "slideshow" in data
 
 
     def test_invalid_endpoint_returns_404(self, api_client):
