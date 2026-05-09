@@ -7,6 +7,10 @@ from utils.security import (
     check_unauthorized_access
 )
 
+# =========================================================
+# TERMINAL COLOR CONFIGURATION
+# =========================================================
+
 # Risk level coloring
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -14,22 +18,16 @@ RED = "\033[91m"
 RESET = "\033[0m"
 
 
+# =========================================================
+# GLOBAL RESULTS STORAGE
+# =========================================================
 
-from utils.security import (
-    check_data_exposure,
-    check_info_leakage,
-    check_header_integrity
-)
-
+results_summary = []
 
 
-# Color codes
-GREEN = "\033[92m"
-RED = "\033[91m"
-RESET = "\033[0m"
-
-results_summary =[]
-
+# =========================================================
+# RESULT RENDERING / OUTPUT DISPLAY
+# =========================================================
 
 def print_result(endpoint, method, status_code, expected, passed):
     if passed:
@@ -94,6 +92,10 @@ def print_header_integrity(results):
             print(f"  - {h}")
 
     print("-" * 40)
+
+# =========================================================
+# SECURITY SCORING ENGINE
+# =========================================================
 
 #SEVERITY WEIGHTS
 SEVERITY_WEIGHTS = {
@@ -171,6 +173,9 @@ def print_security_score(score, endpoint):
 
     print(f"\n{color}[SECURITY SCORE] {endpoint} → {score}/100 ({risk})\033[0m")
 
+# =========================================================
+# SECURITY ANALYSIS ORCHESTRATION
+# =========================================================
 
 def run_security_checks(response, endpoint):
 
@@ -261,6 +266,9 @@ def print_summary():
         print(f"{result['method']:<10}{result['endpoint']:<20}{result['score']:<10}{color}{result['risk']}{RESET}")
     export_results_to_json()    
 
+# =========================================================
+# RESULT EXPORTING / PERSISTENCE
+# =========================================================
 
 #Output to JSON
 def export_results_to_json(filename="gatekeeper_results.json"):
@@ -278,4 +286,3 @@ def print_sensitive_findings(findings, endpoint):
         for f in findings:
             print(f" - {f}")
         print("-" * 40)   
-
