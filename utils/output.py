@@ -12,14 +12,10 @@ from security.scoring import (
     get_risk_color
 )
 
+from core.results import results_summary
+
 from config.colors import GREEN, YELLOW, RED, RESET
-
-# =========================================================
-# GLOBAL RESULTS STORAGE
-# =========================================================
-
-results_summary = []
-
+from reporting.export import export_results_to_json
 
 # =========================================================
 # RESULT RENDERING / OUTPUT DISPLAY
@@ -194,16 +190,7 @@ def print_summary():
         print(f"{result['method']:<10}{result['endpoint']:<20}{result['score']:<10}{color}{result['risk']}{RESET}")
     export_results_to_json()    
 
-# =========================================================
-# RESULT EXPORTING / PERSISTENCE
-# =========================================================
 
-#Output to JSON
-def export_results_to_json(filename="gatekeeper_results.json"):
-    with open(filename, "w") as f:
-        json.dump(results_summary, f, indent=4)
-
-    print(f"\n📁 Results exported to {filename}")
 
 #Sensitive Field Output
 YELLOW = "\033[93m"
