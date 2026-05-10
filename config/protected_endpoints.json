@@ -1,0 +1,5 @@
+[
+    "GET /admin",
+    "GET /profile",
+    "GET /dashboard"
+]

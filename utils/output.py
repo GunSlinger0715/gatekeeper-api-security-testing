@@ -101,6 +101,9 @@ def print_security_score(score, endpoint):
 # SECURITY ANALYSIS ORCHESTRATION
 # =========================================================
 
+with open("config/protected_endpoints.json", "r") as f:
+    protected_endpoints = json.load(f)
+
 def run_security_checks(response, endpoint):
 
     findings = check_data_exposure(response)
@@ -111,12 +114,6 @@ def run_security_checks(response, endpoint):
 
     header_results = check_header_integrity(response)
     print_header_integrity(header_results)
-
-    protected_endpoints = [
-        "GET /admin",
-        "GET /profile",
-        "GET /dashboard"
-    ]
 
     unauthorized, secure_behavior = check_unauthorized_access(
         response,
