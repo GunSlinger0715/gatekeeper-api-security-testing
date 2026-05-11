@@ -135,6 +135,21 @@ pip install -r requirements.txt
 pytest -s
 ```
 
+## Continuous Integration
+
+GateKeeper uses GitHub Actions for automated continuous integration testing.
+
+Every push and pull request to the `main` branch automatically triggers:
+
+- Dependency installation
+- Environment validation
+- Automated pytest execution
+
+This ensures the project remains stable, portable, and regression-resistant as the architecture evolves.
+
+Engineering Philosophy:
+> From Validation to Intelligence.  
+> From GateKeeper to Heimdall.
 ---
 
 # Current Focus
