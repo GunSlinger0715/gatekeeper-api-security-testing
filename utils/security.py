@@ -14,8 +14,6 @@ def check_data_exposure(response):
     except Exception:
         data_str = ""
 
-    return findings
-
     # 🔐 Sensitive fields (v1 scope)
     sensitive_fields = [
         "password",
