@@ -169,7 +169,11 @@ def check_sensitive_fields(response):
         matches = re.findall(pattern, data_str)
 
         for match in matches:
-            findings.append(f"{label} detected: {match}")
+            findings.append({
+                "finding": f"{label} Exposure Detected",
+                "severity": "HIGH",
+                "details": f"{label} detected: {match}"
+            })
 
             if label == "Token":
                 issues = analyze_token(match)
