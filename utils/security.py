@@ -184,16 +184,27 @@ def analyze_token(token):
 
     # Length checks
     if len(token) < 20:
-        issues.append("Token too short")
+        issues.append({
+            "finding": "Weak Token Structure",
+            "severity": "MEDIUM",
+            "details": "Token too short"
+        })
 
     if len(token) > 500:
-        issues.append("Token unusually long")
+        issues.append({
+            "finding": "Suspicious Token Length",
+            "severity": "MEDIUM",
+            "details": "Token unusually long"
+        })
 
     # JWT structure check (header.payload.signature)
     parts = token.split(".")
     if len(parts) != 3:
-        issues.append("Invalid JWT structure")
-
+        issues.append({
+            "finding": "Invalid JWT Structure",
+            "severity": "MEDIUM",
+            "details": "Token does not follow JWT header.payload.signature format"
+        })
 def detect_and_analyze_tokens(data):
     findings = []
 
@@ -209,7 +220,8 @@ def detect_and_analyze_tokens(data):
             issues = analyze_token(token)
 
             for issue in issues:
-                findings.append(f"{issue} in field '{key}'")
+                issues["details"] += f" in field '{key}'"
+                findings.append(issue)
 
 
     return issues
@@ -260,13 +272,21 @@ def detect_token_anomalies(data):
             
             # --- Length Check ---
             if len(token) > 100:
-                findings.append(f"[WARNING] Suspiciously long token detected in '{key}'")
+                findings.append({
+                    "finding": "Suspicious Token Length",
+                    "severity": "MEDIUM",
+                    "details": f"Suspiciously long token detected in '{key}'"
+             })
 
             # --- JWT Structure Check ---
             if token.count('.') == 2:
                 parts = token.split('.')
                 if all(len(part) > 0 for part in parts):
-                    findings.append(f"[INFO] JWT-like token detected in '{key}'")
+                    findings.append({
+                        "finding": "JWT-Like Token Detected",
+                        "severity": "LOW",
+                        "details": f"JWT-like token detected in '{key}'"
+            })
 
             # --- Weak / Likely False Positive ---
             if token.lower() in ["password", "username", "admin"]:
