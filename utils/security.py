@@ -58,11 +58,7 @@ def check_info_leakage(response):
 
     if strength_issues:
         for issue in strength_issues:
-            findings.append({
-                "finding": "Weak Security Header Configuration",
-                "severity": "LOW",
-                "details": issue
-        })
+            findings.append(issue)
 
     return findings
 
@@ -236,7 +232,11 @@ def validate_header_strength(headers):
     csp = headers.get("Content-Security-Policy")
     if csp:
         if "*" in csp:
-            issues.append("[WARNING] CSP is too permissive (contains '*')")
+            issues.append({
+                "finding": "Weak Content Security Policy",
+                "severity": "HIGH",
+                "details": "CSP is too permissive (contains'*')"
+            })
         if "unsafe-inline" in csp:
             issues.append("[WARNING] CSP allows unsafe-inline (XSS risk)")
 
