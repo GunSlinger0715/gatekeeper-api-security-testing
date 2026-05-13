@@ -238,15 +238,27 @@ def validate_header_strength(headers):
                 "details": "CSP is too permissive (contains'*')"
             })
         if "unsafe-inline" in csp:
-            issues.append("[WARNING] CSP allows unsafe-inline (XSS risk)")
+            issues.append({
+                "finding": "Weak Content Security Policy",
+                "severity": "HIGH",
+                "details": "CSP allows unsafe-inline (XSS risk)"
+            })
 
     # --- Strict-Transport-Security ---
     hsts = headers.get("Strict-Transport-Security")
     if hsts:
         if "includeSubDomains" not in hsts:
-            issues.append("[WARNING] HSTS missing includeSubDomains")
+            issues.append({
+                "finding": "Weak HTTP Strict Transport Security",
+                "severity": "MEDIUM",
+                "details": "HSTS missing includdeSubDomains"
+            })
         if "max-age" not in hsts:
-            issues.append("[WARNING] HSTS missing max-age")
+            issues.append({
+                "finding": "Weak HTTP Strict Transport Security",
+                "severity": "MEDIUM",
+                "details": "HSTS missing max-age"
+            })
 
     # --- X-Frame-Options ---
     xfo = headers.get("X-Frame-Options")
