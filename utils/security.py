@@ -54,12 +54,6 @@ def check_info_leakage(response):
             "details": f"X-Powered-By header exposed: {headers['x-powered-by']}"
         })
 
-    strength_issues = validate_header_strength(headers)
-
-    if strength_issues:
-        for issue in strength_issues:
-            findings.append(issue)
-
     return findings
 
 REQUIRED_SECURITY_HEADERS = {
@@ -112,9 +106,9 @@ def check_header_integrity(response):
     
         strength_issues = validate_header_strength(headers)
 
-        for issue in strength_issues: 
-            results["misconfigured_headers"].append(issue)
-
+        if strength_issues:
+            for issue in strength_issues:
+                results["findings"].append(issue)
 
     return results        
 
@@ -264,7 +258,11 @@ def validate_header_strength(headers):
     xfo = headers.get("X-Frame-Options")
     if xfo:
         if xfo not in ["DENY", "SAMEORIGIN"]:
-            issues.append(f"[WARNING] Weak X-Frame-Options value: {xfo}")
+            issues.append({
+                "finding": "Weak X-Frame-Options Configuration",
+                "severity": "MEDIUM",
+                "details": f"Weak X-Frame-Options value detected: {xfo}"
+            })
 
     return issues
 
