@@ -30,7 +30,7 @@ The framework blends traditional QA-style endpoint testing with lightweight secu
 ## Authorization Validation
 - Protected endpoint awareness
 - Contextual trust-boundary validation
-- Secure authorization behavior scaffolding
+- Secure authorization behavior validation scaffolding
 - Unauthorized access detection architecture
 
 ## Token Analysis
@@ -68,7 +68,7 @@ The framework validates not only endpoint availability, but also secure endpoint
 This enables:
 - Consistent scoring
 - Structured reporting
-- Future AI-assisted analysis integration
+- Future intelligence-correlation integration
 - Scalable detection expansion
 - Standardized JSON export support
 
@@ -77,7 +77,7 @@ This enables:
 # Example Output
 
 ```text
-[WARNING] GET /post/1 - Potential information leakage detected:
+[SECURITY FINDING] GET /post/1 - Potential information leakage detected:
 
  - [MEDIUM] Server header exposed: cloudflare
 
@@ -91,7 +91,7 @@ This enables:
 
 ----------------------------------------
 
-[SECURITY SCORE] GET /post/1 → 90/100 (MEDIUM RISK)
+[SECURITY SCORE] GET /post/1 → 90/100 
 ```
 
 ---
@@ -150,6 +150,7 @@ This ensures the project remains stable, portable, and regression-resistant as t
 Engineering Philosophy:
 > From Validation to Intelligence.  
 > From GateKeeper to Heimdall.
+
 ---
 
 # Current Focus
@@ -159,14 +160,14 @@ Current development priorities include:
 - Severity-based scoring refinement
 - Enhanced token anomaly analysis
 - Improved reporting and visualization
-- CI/CD integration preparation
+- CI/CD workflow refinement
 
 ---
 
 # Future Roadmap
 
 Planned future enhancements include:
-- AI-assisted finding correlation
+- Assisted finding correlation and intelligence aggregation
 - Advanced attack pattern recognition
 - OWASP API Top 10 expansion
 - Enhanced dashboards and reporting
@@ -190,5 +191,7 @@ Future architectural development will focus on intelligent response analysis, ad
 - Dynamic handling of JSON, HTML, XML, and text-based API responses
 - Intelligent response classification and contextual trust-boundary analysis
 - Resilient parser routing and graceful handling of unexpected response formats
+
+Future ecosystem development may include behavioral API telemetry analysis, anomaly inspection workflows, and structured intelligence persistence across modular security subsystems.
 
 
