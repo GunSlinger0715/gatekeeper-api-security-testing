@@ -86,16 +86,12 @@ def print_header_integrity(results, endpoint):
         print("-" * 40)
 
 def print_security_score(score, endpoint):
+
     risk = get_risk_level(score)
 
-    if score >= 90:
-        color = "\033[92m"
-    elif score >= 70:
-        color = "\033[93m"
-    else:
-        color = "\033[91m"
+    color = get_risk_color(risk)
 
-    print(f"\n{color}[SECURITY SCORE] {endpoint} → {score}/100 ({risk})\033[0m")
+    print(f"\n{color}[SECURITY SCORE] {endpoint} → {score}/100 ({risk}){RESET}")
 
 # =========================================================
 # SECURITY ANALYSIS ORCHESTRATION
