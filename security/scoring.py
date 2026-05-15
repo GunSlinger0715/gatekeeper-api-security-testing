@@ -1,4 +1,4 @@
-from config.colors import GREEN, YELLOW, RED, RESET 
+from config.colors import GREEN, YELLOW, RED, RESET, ORANGE
 
 # =========================================================
 # SECURITY SCORING ENGINE
@@ -69,10 +69,17 @@ def get_risk_level(score):
     return "CRITICAL"
 
 def get_risk_color(risk):
-    if risk == "HIGH RISK":
+
+    if risk == "CRITICAL":
         return RED
+
+    elif risk == "HIGH RISK":
+        return ORANGE
+
     elif risk == "MEDIUM RISK":
         return YELLOW
+
     elif risk == "LOW RISK":
         return GREEN
+
     return RESET
