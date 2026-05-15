@@ -220,7 +220,7 @@ def detect_and_analyze_tokens(data):
                 findings.append(issue)
 
 
-    return issues
+    return findings
 
 #Header Strength Validation
 def validate_header_strength(headers):
