@@ -36,17 +36,18 @@ def calculate_security_score(findings, leaks, header_results, sensitive):
     if leaks:
         score -= len(leaks) * 10
     
-    #Sensitive data (VERY HIGH)
-    if sensitive: 
-        score -= len(sensitive) * 20
-    
     # Token anomaly (EXTRA penalty)
-    if any ("Token anomaly" in f for f in sensitive):
+    # Temporary legacy token anomaly handling
+    # Will be normalized during security.py refactor
+    if any(
+        isinstance(f, dict) and "Token" in f.get("finding", "")
+        for f in sensitive
+    ):
         score -= 10
 
     # Missing Headers (MEDIUM)
-    #missing = header_results.get("missing_headers", [])
-    #score -= len(missing) * 5
+    missing = header_results.get("missing_headers", [])
+    score -= len(missing) * 5
 
     #Misconfigured headers (LOW)
     misconfigured = header_results.get("misconfigured_headers", [])
@@ -56,13 +57,13 @@ def calculate_security_score(findings, leaks, header_results, sensitive):
 
 
 def get_risk_level(score):
-    if score >= 95:
+    if score >= 90:
         return "LOW RISK"
 
-    elif score >= 75:
+    elif score >= 70:
         return "MEDIUM RISK"
 
-    elif score >= 50:
+    elif score >= 40:
         return "HIGH RISK"
 
     return "CRITICAL"

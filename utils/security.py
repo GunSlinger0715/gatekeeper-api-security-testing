@@ -165,8 +165,9 @@ def check_sensitive_fields(response):
 
             if label == "Token":
                 issues = analyze_token(match)
-                for issue in issues:
-                    findings.append(f"⚠️ Token anomaly detected ({issue})")
+                
+                for issue in issues: 
+                    findings.append(issue)
 
     return findings
 
@@ -197,6 +198,9 @@ def analyze_token(token):
             "severity": "MEDIUM",
             "details": "Token does not follow JWT header.payload.signature format"
         })
+
+    return issues
+
 def detect_and_analyze_tokens(data):
     findings = []
 
@@ -212,7 +216,7 @@ def detect_and_analyze_tokens(data):
             issues = analyze_token(token)
 
             for issue in issues:
-                issues["details"] += f" in field '{key}'"
+                issue["details"] += f" in field '{key}'"
                 findings.append(issue)
 
 

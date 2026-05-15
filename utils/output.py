@@ -55,26 +55,26 @@ def print_structured_findings(findings):
 
 def print_data_exposure(findings, endpoint):
     if findings:
-        print(f"\n\033[93m[WARNING] {endpoint} - Potential data exposure detected:\033[0m")
+        print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Data Exposure Analysis:\033[0m")
         print_structured_findings(findings)
         print("-" * 40)
 
 
 def print_info_leakage(leaks, endpoint):
     if leaks:
-        print(f"\n\033[93m[WARNING] {endpoint} - Potential information leakage detected:\033[0m")
+        print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Information Exposure Analysis:\033[0m")
         print_structured_findings(leaks)
         print("-" * 40)
 
 
-def print_header_integrity(results):
+def print_header_integrity(results, endpoint):
     if results["missing_headers"]:
-        print("\n\033[91m[FAIL] Missing Security Headers:\033[0m")
+        print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Missing Security Headers:\033[0m")
         for h in results["missing_headers"]:
             print(f"  - {h}")
 
     if results["misconfigured_headers"]:
-        print("\n\033[93m[WARN] Misconfigured Headers:\033[0m")
+        print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Misconfigured Headers:\033[0m")
         for h, val in results["misconfigured_headers"]:
             print(f"  - {h}: {val}")
 
@@ -83,7 +83,7 @@ def print_header_integrity(results):
         for h in results["valid_headers"]:
             print(f"  - {h}")
 
-    print("-" * 40)
+        print("-" * 40)
 
 def print_security_score(score, endpoint):
     risk = get_risk_level(score)
@@ -113,7 +113,7 @@ def run_security_checks(response, endpoint):
     print_info_leakage(leaks, endpoint)
 
     header_results = check_header_integrity(response)
-    print_header_integrity(header_results)
+    print_header_integrity(header_results, endpoint)
 
     unauthorized, secure_behavior = check_unauthorized_access(
         response,
@@ -145,8 +145,6 @@ def run_security_checks(response, endpoint):
     sensitive = check_sensitive_fields(response)
     print_sensitive_findings(sensitive, endpoint)
 
-    structured_findings = header_results.get("findings", [])
-
     score = calculate_security_score(findings, leaks, header_results, sensitive)
     print_security_score(score, endpoint)
 
@@ -156,15 +154,7 @@ def run_security_checks(response, endpoint):
         "score": score,
         "risk": get_risk_level(score)
     })
-
-def get_risk_color(risk):
-    if risk == "HIGH RISK":
-        return RED
-    elif risk == "MEDIUM RISK":
-        return YELLOW
-    elif risk == "LOW RISK":
-        return GREEN
-    return RESET    
+  
 
 def print_summary():
     print("\n\n========== SECURITY SUMMARY ==========")
@@ -194,7 +184,6 @@ YELLOW = "\033[93m"
 
 def print_sensitive_findings(findings, endpoint):
     if findings:
-        print(f"\n{YELLOW}[WARNING] {endpoint} - Sensitive data detected:\033[0m")
-        for f in findings:
-            print(f" - {f}")
-        print("-" * 40)   
+        print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Sensitive Field Analysis:\033[0m")
+        print_structured_findings(findings)
+        print("-" * 40)
