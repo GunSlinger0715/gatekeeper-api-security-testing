@@ -90,25 +90,35 @@ def check_header_integrity(response):
 
             continue
 
-        if expected:
-            if isinstance(expected, list):
-                if not any(opt in value for opt in expected):
-                    results["misconfigured_headers"].append((header, value))
-                else:
-                    results["valid_headers"].append(header)
-            else:
-                if expected not in value:
-                    results["misconfigured_headers"].append((header, value))
-                else:
-                    results["valid_headers"].append(header)
-        else:
-            results["valid_headers"].append(header)
-          
-    strength_issues = validate_header_strength(headers)
+    if expected: 
 
-    if strength_issues:
-        for issue in strength_issues:
-            results["findings"].append(issue)
+        if isinstance(expected, list):
+
+            if not(opt in value for opt in expected):
+
+                results["misconfigured_headers"].append({
+                    "header": header, 
+                    "observed_value": value, 
+                    "issue": "Misconfigured Header"
+                })
+
+            else: 
+                results["valid_headers"].append(header)
+
+        else:
+
+            if expected not in value: 
+
+                results["misconfigured_headers"].append({
+                    "header": header, 
+                    "observed_value": value, 
+                    "issue": "Misconfigured Header"
+                })
+            else: 
+                results["valid_headers"].append(header)
+
+    else: 
+        results["valid_headers"].append(header) 
     
     return results        
 
@@ -269,43 +279,3 @@ def validate_header_strength(headers):
             })
 
     return issues
-
-#Token Anomaly Detection
-
-def detect_token_anomalies(data):
-    findings = []
-
-    # Regex for token-like strings (long random strings)
-    token_pattern = re.compile(r'\b[A-Za-z0-9\-_]{20,}\b')
-
-    for key, value in data.items():
-        if not isinstance(value, str):
-            continue
-
-        matches = token_pattern.findall(value)
-
-        for token in matches:
-            
-            # --- Length Check ---
-            if len(token) > 100:
-                findings.append({
-                    "finding": "Suspicious Token Length",
-                    "severity": "MEDIUM",
-                    "details": f"Suspiciously long token detected in '{key}'"
-             })
-
-            # --- JWT Structure Check ---
-            if token.count('.') == 2:
-                parts = token.split('.')
-                if all(len(part) > 0 for part in parts):
-                    findings.append({
-                        "finding": "JWT-Like Token Detected",
-                        "severity": "LOW",
-                        "details": f"JWT-like token detected in '{key}'"
-            })
-
-            # --- Weak / Likely False Positive ---
-            if token.lower() in ["password", "username", "admin"]:
-                continue
-
-    return findings
