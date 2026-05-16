@@ -103,13 +103,13 @@ def check_header_integrity(response):
                     results["valid_headers"].append(header)
         else:
             results["valid_headers"].append(header)
+          
+    strength_issues = validate_header_strength(headers)
+
+    if strength_issues:
+        for issue in strength_issues:
+            results["findings"].append(issue)
     
-        strength_issues = validate_header_strength(headers)
-
-        if strength_issues:
-            for issue in strength_issues:
-                results["findings"].append(issue)
-
     return results        
 
 def check_unauthorized_access(response, endpoint, protected_endpoints):
