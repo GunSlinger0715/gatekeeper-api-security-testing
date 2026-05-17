@@ -5,6 +5,9 @@ from token_analysis import analyze_tokens
 import math
 from collections import Counter
 
+# =========================================================
+# TOKEN EXTRACTION
+# =========================================================
 
 TOKEN_PATTERNS = [
     r"Bearer\s+([A-Za-z0-9\-._~+/]+=*)",
@@ -31,6 +34,9 @@ def extract_candidate_tokens(text):
 
     return list(set(tokens))
 
+# =========================================================
+# TOKEN CLASSIFICATION
+# =========================================================
 
 def classify_token(token):
     """
@@ -57,6 +63,9 @@ def classify_token(token):
         "confidence": "LOW"
     }
 
+# =========================================================
+# TOKEN ORCHESTRATION
+# =========================================================
 
 # Classify Token
 def analyze_tokens(text):
@@ -76,6 +85,10 @@ def analyze_tokens(text):
         results.append(strength_findings)
 
     return results
+
+# =========================================================
+# JWT VALIDATION
+# =========================================================
 
 def decode_base64url(data):
     """"
@@ -178,6 +191,10 @@ def validate_jwt(token):
         })
 
     return findings
+
+# =========================================================
+# TOKEN STRENGTH ANALYSIS
+# =========================================================
 
 # Validate JWT 
 def calculate_entropy(data):

@@ -42,7 +42,7 @@ def get_status_message(status_code):
     }
     return messages.get(status_code, "Unknown response")
 
-#Structured Renderer
+#Structured Fingins Rendering
 def print_structured_findings(findings):
     for finding in findings: 
 
@@ -52,7 +52,7 @@ def print_structured_findings(findings):
         else: 
             print(f" - {finding}")
 
-
+# Exposure Analysis Rendering
 def print_data_exposure(findings, endpoint):
     if findings:
         print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Data Exposure Analysis:\033[0m")
@@ -66,7 +66,7 @@ def print_info_leakage(leaks, endpoint):
         print_structured_findings(leaks)
         print("-" * 40)
 
-
+# Header Analysis Rendering
 def print_header_integrity(results, endpoint):
     if results["missing_headers"]:
         print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Missing Security Headers:\033[0m")
@@ -75,8 +75,12 @@ def print_header_integrity(results, endpoint):
 
     if results["misconfigured_headers"]:
         print(f"\n\033[93m[SECURITY FINDINGS] {endpoint} - Misconfigured Headers:\033[0m")
-        for h, val in results["misconfigured_headers"]:
-            print(f"  - {h}: {val}")
+        for issue in results["misconfigured_headers"]:
+
+            header = issue["header"]
+            value = issue["observed_value"]
+
+            print(f" - {header}: {value}")
 
     if results["valid_headers"]:
         print("\n\033[92m[PASS] Valid Security Headers:\033[0m")
@@ -85,6 +89,7 @@ def print_header_integrity(results, endpoint):
 
         print("-" * 40)
 
+# Security Score Rendering
 def print_security_score(score, endpoint):
 
     risk = get_risk_level(score)
@@ -139,6 +144,8 @@ def run_security_checks(response, endpoint):
     # Sensitive Field Detection
     # ----------------------------
     sensitive = check_sensitive_fields(response)
+
+    # Sensitive Findings Rendering
     print_sensitive_findings(sensitive, endpoint)
 
     score = calculate_security_score(findings, leaks, header_results, sensitive)
@@ -176,7 +183,6 @@ def print_summary():
 
 
 #Sensitive Field Output
-YELLOW = "\033[93m"
 
 def print_sensitive_findings(findings, endpoint):
     if findings:

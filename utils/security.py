@@ -4,6 +4,10 @@ import re
 
 # utils/security.py
 
+# =========================================================
+# DATA EXPOSURE ANALYSIS
+# =========================================================
+
 def check_data_exposure(response):
     findings = []
 
@@ -35,6 +39,10 @@ def check_data_exposure(response):
 
     return findings
 
+# =========================================================
+# INFORMATION LEAKAGE ANALYSIS
+# =========================================================
+
 def check_info_leakage(response):
     findings = []
 
@@ -55,6 +63,10 @@ def check_info_leakage(response):
         })
 
     return findings
+
+# =========================================================
+# HEADER SECURITY ANALYSIS
+# =========================================================
 
 REQUIRED_SECURITY_HEADERS = {
     "Strict-Transport-Security": "max-age=",
@@ -120,7 +132,11 @@ def check_header_integrity(response):
     else: 
         results["valid_headers"].append(header) 
     
-    return results        
+    return results    
+
+# =========================================================
+# AUTHORIZATION ANALYSIS
+# =========================================================    
 
 def check_unauthorized_access(response, endpoint, protected_endpoints):
 
