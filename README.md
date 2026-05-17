@@ -99,20 +99,39 @@ This enables:
 # Project Structure
 
 ```text
+## Project Structure
+
 gatekeeper-api-security-testing/
+
+├── core/
+│   ├── client.py
+│   ├── orchestration.py
+│   └── results.py
+│
+├── security/
+│   ├── security.py
+│   ├── token_analysis.py
+│   └── scoring.py
+│
+├── reporting/
+│   ├── output.py
+│   └── export.py
+│
+├── config/
+│   ├── colors.py
+│   ├── settings.py
+│   └── protected_endpoints.json
 │
 ├── tests/
 │   ├── test_endpoints.py
-│   ├── token_analysis.py
+│   └── token_analysis.py
 │
-├── utils/
-│   ├── security.py
-│   ├── output.py
-│   ├── api_client.py
+├── docs/
 │
-├── config/
 ├── README.md
 ├── requirements.txt
+├── LICENSE
+└── conftest.py
 ```
 
 ---
