@@ -107,13 +107,20 @@ with open("config/protected_endpoints.json", "r") as f:
 
 def run_security_checks(response, endpoint):
 
+    all_findings = []
+
     findings = check_data_exposure(response)
+    all_findings.extend(findings)
+
     print_data_exposure(findings, endpoint)
 
     leaks = check_info_leakage(response)
+    all_findings.extend(leaks)
     print_info_leakage(leaks, endpoint)
 
     header_results = check_header_integrity(response)
+    all_findings.extend(header_results["findings"])
+    
     print_header_integrity(header_results, endpoint)
 
     unauthorized, secure_behavior = check_unauthorized_access(
@@ -123,6 +130,8 @@ def run_security_checks(response, endpoint):
     )
 
     if unauthorized:
+
+        all_findings.extend(unauthorized)
 
         print("\n\033[91m[FAIL] Unauthorized Access Detected:\033[0m")
 
@@ -144,12 +153,17 @@ def run_security_checks(response, endpoint):
     # Sensitive Field Detection
     # ----------------------------
     sensitive = check_sensitive_fields(response)
+    all_findings.extend(sensitive)
 
     # Sensitive Findings Rendering
     print_sensitive_findings(sensitive, endpoint)
 
     score = calculate_security_score(findings, leaks, header_results, sensitive)
     print_security_score(score, endpoint)
+
+    print(f"\n[DEBUG] Centralized Findings Count: {len(all_findings)}")
+    for finding in all_findings: 
+        print(f"[DEBUG FINDING] {finding}")
 
     results_summary.append({
         "method": endpoint.split()[0],
