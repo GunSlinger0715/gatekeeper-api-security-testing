@@ -18,6 +18,9 @@
 
 name: GateKeeper Tests
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
