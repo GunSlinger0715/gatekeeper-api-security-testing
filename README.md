@@ -83,7 +83,7 @@ This enables:
 # Ecosystem Vision
 
 <p align="center">
-  <img src="docs/images/philosophy.png" width="100%">
+  ![Platform Philosophy](docs/images/philosophy.png)
 </p>
 
 ```text
@@ -91,6 +91,14 @@ GateKeeper → Observe
 Monolith → Remember
 Heimdall → Interpret
 ```
+
+Project GateKeeper is evolving toward a cooperative security intelligence ecosystem built around layered responsibilities and explainable security analysis.
+
+- **GateKeeper** performs endpoint observation, validation, and structured security analysis.
+- **Monolith** serves as the centralized intelligence persistence and contextual memory layer.
+- **Heimdall** acts as the interpretation and adaptive analysis layer, transforming technical findings into contextual human-readable intelligence.
+
+This architecture supports future explainable security intelligence workflows, adaptive analysis, structured trust-aware interpretation, and resilient analysis across heterogeneous API environments.
 
 ---
 
