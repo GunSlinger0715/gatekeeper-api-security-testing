@@ -83,7 +83,7 @@ This enables:
 # Ecosystem Vision
 
 <p align="center">
-  <img src="docs/images/gatekeeper-ecosystem.png" width="100%">
+  <img src="docs/images/philosophy.png" width="100%">
 </p>
 
 ```text
