@@ -20,9 +20,22 @@ def scan_auth_endpoints():
         if response and response.status_code == 200:
         
             findings.append(create_finding(
-                finding="Accessible Authentication Endpoint",
-                severity="HIGH",
-                details=f"{endpoint} is accessible without authentication"
+                    finding="Accessible Authentication Endpoint",
+                    severity="HIGH",
+                    details=f"{endpoint} is accessible without authentication",
+
+                why_it_matters=(
+                    "Authentication-related endpoints exposed without "
+                    "access controls may increase the risk of " 
+                    "unauthorized administrative or account access."
+                ),
+
+                recommended_actions=[
+                    "Validate authenticaition enforcement on the endpoints.",
+                    "Confirm administrtive routes require authorization.",
+                    "Review access control and session validation logic."
+                
+                ]
             ))
     return findings
 
