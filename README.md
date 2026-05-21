@@ -61,7 +61,13 @@ The framework validates not only endpoint availability, but also secure endpoint
 {
     "finding": "Information Leakage",
     "severity": "MEDIUM",
-    "details": "Server header exposed: cloudflare"
+    "details": "Server header exposed: cloudflare",
+    "why_it_matters": "Exposed infrastructure details may assist reconnaissance efforts.",
+    "recommended_actions": [
+        "Review reverse proxy header policies",
+        "Minimize infrastructure disclosure"
+    ],
+    "trust_level": "moderate"
 }
 ```
 
@@ -71,6 +77,20 @@ This enables:
 - Future intelligence-correlation integration
 - Scalable detection expansion
 - Standardized JSON export support
+
+---
+
+# Ecosystem Vision
+
+<p align="center">
+  <img src="docs/images/gatekeeper-ecosystem.png" width="100%">
+</p>
+
+```text
+GateKeeper → Observe
+Monolith → Remember
+Heimdall → Interpret
+```
 
 ---
 
