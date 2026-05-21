@@ -83,7 +83,7 @@ This enables:
 # Ecosystem Vision
 
 <p align="center">
-  ![Platform Philosophy](docs/images/philosophy.png)
+  <img src="docs/images/philosophy.png" width="100%">
 </p>
 
 ```text
