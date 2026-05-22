@@ -167,12 +167,15 @@ def run_security_checks(response, endpoint):
 
     if findings: 
 
-        for finding in findings:
+        print("\n[INFORMATION EXPOSURE]")
 
-            severity = finding.get("severity", "UNKNOWN")
-            details = finding.get("details", "No details provided")
+        for finding in findings: 
 
-            print(f"[{severity}] {details}")
+            severity = findings.get("severity", "UNKNOWN")
+            details = findings.get("details", "No details provided")
+
+            print(f" - [{severity}] {details}")
+
     else: 
         print("[INFO] No additional security findings detected")
     
