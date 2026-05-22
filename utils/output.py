@@ -162,9 +162,20 @@ def run_security_checks(response, endpoint):
     print_security_score(score, endpoint)
 
     print(f"\n[DEBUG] Centralized Findings Count: {len(all_findings)}")
-    for finding in all_findings: 
-        print(f"[DEBUG FINDING] {finding}")
+    
+    print("\n[SECURITY FINDINGS SUMMARY]")
 
+    if findings: 
+
+        for finding in findings:
+
+            severity = finding.get("severity", "UNKNOWN")
+            details = finding.get("details", "No details provided")
+
+            print(f"[{severity}] {details}")
+    else: 
+        print("[INFO] No additional security findings detected")
+    
     results_summary.append({
         "method": endpoint.split()[0],
         "endpoint": endpoint.split()[1],
