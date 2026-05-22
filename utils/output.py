@@ -13,9 +13,11 @@ from security.scoring import (
 )
 
 from core.results import results_summary, print_operational_summary
+from core.lifecycle import ExecutionLifecycle
 
 from config.colors import GREEN, YELLOW, RED, RESET
 from reporting.export import export_results_to_json
+from core.context import ExecutionContext
 
 # =========================================================
 # RESULT RENDERING / OUTPUT DISPLAY
@@ -107,19 +109,25 @@ with open("config/protected_endpoints.json", "r") as f:
 
 def run_security_checks(response, endpoint):
 
-    all_findings = []
+    lifecycle = ExecutionLifecycle()
+    context = ExecutionContext(endpoint)
+    lifecycle.enter_phase("RESPONSE_VALIDATION")
+    context.set_phase(lifecycle.get_current_phase())
 
+    lifecycle.enter_phase("SECURITY_ANALYSIS")
+    context.set_phase(lifecycle.get_current_phase())
     findings = check_data_exposure(response)
-    all_findings.extend(findings)
+    context.add_findings(findings)
+    
 
     print_data_exposure(findings, endpoint)
 
     leaks = check_info_leakage(response)
-    all_findings.extend(leaks)
+    context.add_findings(leaks)
     print_info_leakage(leaks, endpoint)
 
     header_results = check_header_integrity(response)
-    all_findings.extend(header_results["findings"])
+    context.add_findings(header_results["findings"])
     
     print_header_integrity(header_results, endpoint)
 
@@ -131,7 +139,7 @@ def run_security_checks(response, endpoint):
 
     if unauthorized:
 
-        all_findings.extend(unauthorized)
+        context.add_findings(unauthorized)
 
         print("\n\033[91m[FAIL] Unauthorized Access Detected:\033[0m")
 
@@ -153,19 +161,23 @@ def run_security_checks(response, endpoint):
     # Sensitive Field Detection
     # ----------------------------
     sensitive = check_sensitive_fields(response)
-    all_findings.extend(sensitive)
+    context.add_findings(sensitive)
 
     # Sensitive Findings Rendering
     print_sensitive_findings(sensitive, endpoint)
 
+    lifecycle.enter_phase("OPERATIONAL_CLASSIFICATION")
+    context.set_phase(lifecycle.get_current_phase())
     score = calculate_security_score(findings, leaks, header_results, sensitive)
     print_security_score(score, endpoint)
 
-    print(f"\n[DEBUG] Centralized Findings Count: {len(all_findings)}")
+    print(f"\n[DEBUG] Centralized Findings Count: {len(context.findings)}")
     
     exposure_findings = findings
     header_findings = header_results.get("findings", [])
 
+    lifecycle.enter_phase("TELEMETRY_AGGREGATION")
+    context.set_phase(lifecycle.get_current_phase())
     results_summary["tested"] += 1
 
     if score >= 70:
@@ -179,6 +191,11 @@ def run_security_checks(response, endpoint):
     results_summary["info_exposures"] += len(exposure_findings)
     results_summary["missing_headers"] += len(header_findings)
     results_summary["sensitive_findings"] += len(sensitive)
+
+    lifecycle.enter_phase("FINAL_RENDERING")
+    context.set_phase(lifecycle.get_current_phase())
+
+    lifecycle.print_completed_phases()
     
 def print_summary():
     print("\n\n========== SECURITY SUMMARY ==========")
