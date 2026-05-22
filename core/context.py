@@ -62,3 +62,18 @@ class ExecutionContext:
     def set_phase(self, phase):
 
         self.current_phase = phase
+
+    def set_stability(self, stability):
+
+        self.stability = stability
+    
+    def to_dict(self):
+
+        return {
+            "endpoint": self.endpoint,
+            "score": self.score,
+            "risk": self.risk,
+            "current_phase": self.current_phase,
+            "stability": self.stability,
+            "findings": self.findings
+        }

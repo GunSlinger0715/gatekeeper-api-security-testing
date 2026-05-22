@@ -1,4 +1,5 @@
 import json
+from core import context
 from utils.security import (
     check_data_exposure,
     check_info_leakage,
@@ -18,7 +19,10 @@ from core.lifecycle import ExecutionLifecycle
 from config.colors import GREEN, YELLOW, RED, RESET
 from reporting.export import export_results_to_json
 from core.context import ExecutionContext
-
+from core.history import (
+    store_execution_context,
+    print_execution_history
+)
 # =========================================================
 # RESULT RENDERING / OUTPUT DISPLAY
 # =========================================================
@@ -169,7 +173,11 @@ def run_security_checks(response, endpoint):
     lifecycle.enter_phase("OPERATIONAL_CLASSIFICATION")
     context.set_phase(lifecycle.get_current_phase())
     score = calculate_security_score(findings, leaks, header_results, sensitive)
+    context.set_score(score)
     print_security_score(score, endpoint)
+    risk = get_risk_level(score)
+
+    context.set_risk(risk)
 
     print(f"\n[DEBUG] Centralized Findings Count: {len(context.findings)}")
     
@@ -180,13 +188,13 @@ def run_security_checks(response, endpoint):
     context.set_phase(lifecycle.get_current_phase())
     results_summary["tested"] += 1
 
-    if score >= 70:
+    if context.score >= 70:
         results_summary["successful"] += 1
     else:
         results_summary["failed"] += 1
 
     results_summary["scores"].append(score)
-    results_summary["risks"].append(get_risk_level(score))
+    results_summary["risks"].append(context.risk)
 
     results_summary["info_exposures"] += len(exposure_findings)
     results_summary["missing_headers"] += len(header_findings)
@@ -194,6 +202,21 @@ def run_security_checks(response, endpoint):
 
     lifecycle.enter_phase("FINAL_RENDERING")
     context.set_phase(lifecycle.get_current_phase())
+
+    print("\n[DEBUG] Serialized Execution Context:")
+
+    serialized = context.to_dict()
+
+    print(f" Endpoint: {serialized['endpoint']}")
+    print(f" Score: {serialized['score']}")
+    print(f" Risk: {serialized['risk']}")
+    print(f" Current Phase: {serialized['current_phase']}")
+    print(f" Findings Count: {len(serialized['findings'])}")
+    store_execution_context(context)
+
+    print("\n[DEBUG] Execution Context Stored In History")
+
+    print_execution_history()
 
     lifecycle.print_completed_phases()
     
