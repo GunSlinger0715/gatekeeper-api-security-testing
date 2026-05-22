@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/GateKeeper Heimdall.png" width="100%">
+  <img src="docs/images/GateKeeper Heimdal.png" width="100%">
 </p>
 
 # Project GateKeeper
