@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/GateKeeper Heimdal.png" width="100%">
+  <img src="docs/images/GateKeeper Heimdall.png" width="100%">
 </p>
 
 # Project GateKeeper
@@ -50,11 +50,52 @@ The framework blends traditional QA-style endpoint testing with lightweight secu
 - Structured findings model
 - Severity-aware analysis pipeline
 
+## Operational Telemetry Engine
+
+GateKeeper now includes a centralized operational telemetry system designed to aggregate and summarize API security test execution results.
+
+### Current Telemetry Capabilities
+
+- Centralized endpoint tracking
+- Security score aggregation
+- Risk-level classification
+- Missing security header analysis
+- Information exposure tracking
+- Sensitive field detection
+- Timeout resilience handling
+- Graceful response degradation
+- Unified pytest session lifecycle orchestration
+- End-of-session operational summaries
+
+### Operational Summary Example
+
+```text
+========================================
+GATEKEEPER OPERATIONAL SUMMARY
+========================================
+
+Endpoints Tested: 2
+Successful Responses: 2
+Failed Responses: 0
+Timeouts Detected: 0
+
+Average Security Score: 60
+Highest Risk Level: HIGH RISK
+
+Information Exposures: 0
+Missing Headers: 12
+Sensitive Findings: 0
+
+System Stability: DEGRADED
+========================================
+```
+
 ---
 
 # Architecture Highlights
 
 GateKeeper uses a modular architecture with centralized structured findings generation.
+
 The framework validates not only endpoint availability, but also secure endpoint behavior through trust-boundary analysis and structured security enforcement validation.
 
 ```python
@@ -77,6 +118,41 @@ This enables:
 - Future intelligence-correlation integration
 - Scalable detection expansion
 - Standardized JSON export support
+
+---
+
+## Architecture Evolution
+
+GateKeeper originally began as a lightweight API security testing framework focused on endpoint validation and response analysis.
+
+The platform has since evolved into a modular operational telemetry system capable of:
+
+- Aggregating distributed security findings
+- Performing runtime risk analysis
+- Tracking endpoint stability
+- Generating centralized operational summaries
+- Supporting scalable future telemetry integrations
+
+This architectural evolution establishes the foundation for future enhancements such as:
+- Historical trend analysis
+- SIEM integrations
+- Dashboard reporting
+- Export pipelines
+- Threat intelligence correlation
+
+---
+
+## Reliability Philosophy
+
+GateKeeper is designed using a graceful degradation philosophy.
+
+When endpoints fail, timeout, or return malformed responses, the framework:
+- Avoids catastrophic test crashes
+- Preserves telemetry collection
+- Logs operational instability
+- Continues executing remaining security analysis safely
+
+This approach enables resilient security testing even in unstable environments.
 
 ---
 
@@ -119,7 +195,7 @@ This architecture supports future explainable security intelligence workflows, a
 
 ----------------------------------------
 
-[SECURITY SCORE] GET /post/1 → 90/100 
+[SECURITY SCORE] GET /post/1 → 90/100
 ```
 
 ---
@@ -127,8 +203,6 @@ This architecture supports future explainable security intelligence workflows, a
 # Project Structure
 
 ```text
-## Project Structure
-
 gatekeeper-api-security-testing/
 
 ├── core/
@@ -182,6 +256,8 @@ pip install -r requirements.txt
 pytest -s
 ```
 
+---
+
 ## Continuous Integration
 
 GateKeeper uses GitHub Actions for automated continuous integration testing.
@@ -194,7 +270,8 @@ Every push and pull request to the `main` branch automatically triggers:
 
 This ensures the project remains stable, portable, and regression-resistant as the architecture evolves.
 
-Engineering Philosophy:
+### Engineering Philosophy
+
 > From Validation to Intelligence.  
 > From GateKeeper to Heimdall.
 
@@ -208,6 +285,8 @@ Current development priorities include:
 - Enhanced token anomaly analysis
 - Improved reporting and visualization
 - CI/CD workflow refinement
+- Operational telemetry stabilization
+- Resilient execution orchestration
 
 ---
 
@@ -220,12 +299,9 @@ Planned future enhancements include:
 - Enhanced dashboards and reporting
 - Config-driven detection rules
 - Intelligent anomaly analysis
-
-# License
-
-This project is licensed under the MIT License.
-
-See the LICENSE file for additional details.
+- Historical telemetry tracking
+- SIEM integration support
+- Behavioral API analysis pipelines
 
 ---
 
@@ -234,6 +310,7 @@ See the LICENSE file for additional details.
 GateKeeper is designed to evolve beyond lightweight API security testing into a scalable, context-aware security analysis platform capable of adapting to increasingly complex API ecosystems and response behaviors.
 
 Future architectural development will focus on intelligent response analysis, adaptive validation logic, and resilient trust-aware security workflows, including:
+
 - Adaptive response-type detection and schema-aware validation
 - Dynamic handling of JSON, HTML, XML, and text-based API responses
 - Intelligent response classification and contextual trust-boundary analysis
@@ -241,4 +318,10 @@ Future architectural development will focus on intelligent response analysis, ad
 
 Future ecosystem development may include behavioral API telemetry analysis, anomaly inspection workflows, and structured intelligence persistence across modular security subsystems.
 
+---
 
+# License
+
+This project is licensed under the MIT License.
+
+See the LICENSE file for additional details.
