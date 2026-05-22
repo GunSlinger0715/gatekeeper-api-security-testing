@@ -21,7 +21,8 @@ from reporting.export import export_results_to_json
 from core.context import ExecutionContext
 from core.history import (
     store_execution_context,
-    print_execution_history
+    print_execution_history,
+    compare_last_execution
 )
 # =========================================================
 # RESULT RENDERING / OUTPUT DISPLAY
@@ -193,6 +194,11 @@ def run_security_checks(response, endpoint):
     else:
         results_summary["failed"] += 1
 
+    if score >= 70:
+        context.set_stability("STABLE")
+    else:
+        context.set_stability("DEGRADED")
+
     results_summary["scores"].append(score)
     results_summary["risks"].append(context.risk)
 
@@ -217,6 +223,8 @@ def run_security_checks(response, endpoint):
     print("\n[DEBUG] Execution Context Stored In History")
 
     print_execution_history()
+
+    compare_last_execution()
 
     lifecycle.print_completed_phases()
     
