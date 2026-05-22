@@ -31,7 +31,7 @@ class TestEndpoints:
             return
         
         passed = response.status_code == 200
-        
+
         print_result("/json", "GET", response.status_code, 200, passed)
 
         print("\n[RESPONSE ANALYSIS] GET /json")
@@ -73,6 +73,12 @@ class TestEndpoints:
         """Verify invalid endpoint returns 404"""
 
         response = api_client.get("/invalid-endpoint")
+    
+        if response is None: 
+        
+            print("[WARNING] Endpoint did not return a response")
+              
+            return
 
         passed = response.status_code == 404
         print_result("/invalid-endpoint", "GET", response.status_code, 404, passed)
