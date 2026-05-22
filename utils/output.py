@@ -165,18 +165,47 @@ def run_security_checks(response, endpoint):
     
     print("\n[SECURITY FINDINGS SUMMARY]")
 
-    if findings: 
+    exposure_findings = []
+    header_findings = []
+
+    if findings:
+
+
+
+        for finding in findings:
+
+            details = finding.get("details", "")
+
+            if "header" in details.lower():
+
+                header_findings.append(finding)
+
+            else:
+                exposure_findings.append(finding)
+
+    if exposure_findings:
 
         print("\n[INFORMATION EXPOSURE]")
 
-        for finding in findings: 
+        for finding in exposure_findings:
 
-            severity = findings.get("severity", "UNKNOWN")
-            details = findings.get("details", "No details provided")
+            severity = finding.get("severity", "UNKNOWN")
+            details = finding.get("details", "No details provided")
 
-            print(f" - [{severity}] {details}")
+            print(f"[{severity}] {details}")
 
-    else: 
+    if header_findings:
+
+        print("\n[HEADER SECURITY]")
+
+        for finding in header_findings:
+
+            severity = finding.get("severity", "UNKNOWN")
+            details = finding.get("details", "No details provided")
+
+            print(f"[{severity}] {details}")
+
+    else:
         print("[INFO] No additional security findings detected")
     
     results_summary.append({
