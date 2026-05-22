@@ -12,7 +12,7 @@ from security.scoring import (
     get_risk_color
 )
 
-from core.results import results_summary
+from core.results import results_summary, print_operational_summary
 
 from config.colors import GREEN, YELLOW, RED, RESET
 from reporting.export import export_results_to_json
@@ -163,59 +163,23 @@ def run_security_checks(response, endpoint):
 
     print(f"\n[DEBUG] Centralized Findings Count: {len(all_findings)}")
     
-    print("\n[SECURITY FINDINGS SUMMARY]")
+    exposure_findings = findings
+    header_findings = header_results.get("findings", [])
 
-    exposure_findings = []
-    header_findings = []
+    results_summary["tested"] += 1
 
-    if findings:
-
-
-
-        for finding in findings:
-
-            details = finding.get("details", "")
-
-            if "header" in details.lower():
-
-                header_findings.append(finding)
-
-            else:
-                exposure_findings.append(finding)
-
-    if exposure_findings:
-
-        print("\n[INFORMATION EXPOSURE]")
-
-        for finding in exposure_findings:
-
-            severity = finding.get("severity", "UNKNOWN")
-            details = finding.get("details", "No details provided")
-
-            print(f"[{severity}] {details}")
-
-    if header_findings:
-
-        print("\n[HEADER SECURITY]")
-
-        for finding in header_findings:
-
-            severity = finding.get("severity", "UNKNOWN")
-            details = finding.get("details", "No details provided")
-
-            print(f"[{severity}] {details}")
-
+    if score >= 70:
+        results_summary["successful"] += 1
     else:
-        print("[INFO] No additional security findings detected")
-    
-    results_summary.append({
-        "method": endpoint.split()[0],
-        "endpoint": endpoint.split()[1],
-        "score": score,
-        "risk": get_risk_level(score)
-    })
-  
+        results_summary["failed"] += 1
 
+    results_summary["scores"].append(score)
+    results_summary["risks"].append(get_risk_level(score))
+
+    results_summary["info_exposures"] += len(exposure_findings)
+    results_summary["missing_headers"] += len(header_findings)
+    results_summary["sensitive_findings"] += len(sensitive)
+    
 def print_summary():
     print("\n\n========== SECURITY SUMMARY ==========")
     print(f"{'Method':<8}{'Endpoint':<25}{'Score':<8}{'Risk'}")
