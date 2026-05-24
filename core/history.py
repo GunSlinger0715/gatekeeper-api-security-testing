@@ -37,6 +37,7 @@ def store_execution_context(context):
     execution_history.append(context.to_dict())
 
 def export_execution_history():
+    os.makedirs("telemetry", exist_ok=True)
     timestamp = datetime.now().strftime("%Y_%m_%d_%H%M%S")
     filename = f"telemetry/execution_history_{timestamp}.json"
     with open(filename, "w") as file:
