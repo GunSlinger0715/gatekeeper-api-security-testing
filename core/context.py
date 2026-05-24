@@ -27,6 +27,10 @@
 # From Orchestration to Execution Intelligence.
 # =========================================================
 
+from datetime import datetime
+
+
+
 class ExecutionContext:
 
     def __init__(self, endpoint):
@@ -42,6 +46,8 @@ class ExecutionContext:
         self.current_phase = None
 
         self.stability = None
+
+        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
     def add_findings(self, findings):
@@ -70,6 +76,8 @@ class ExecutionContext:
     def to_dict(self):
 
         return {
+
+            "timestamp": self.timestamp,
             "endpoint": self.endpoint,
             "score": self.score,
             "risk": self.risk,

@@ -22,7 +22,8 @@ from core.context import ExecutionContext
 from core.history import (
     store_execution_context,
     print_execution_history,
-    compare_last_execution
+    compare_last_execution,
+    export_execution_history
 )
 # =========================================================
 # RESULT RENDERING / OUTPUT DISPLAY
@@ -225,6 +226,9 @@ def run_security_checks(response, endpoint):
     print_execution_history()
 
     compare_last_execution()
+
+    export_execution_history()
+    print("\n[DEBUG] Execution History Exported to JSON")
 
     lifecycle.print_completed_phases()
     

@@ -2,3 +2,10 @@ __pycache__/
 *.pyc
 .env
 .vscode/
+gatekeeper_results.json
+
+# Telemetry runtime exports
+telemetry/
+
+# Execution history exports
+execution_history*.json
