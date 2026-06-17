@@ -125,7 +125,7 @@ def update_telemetry_index(
 
 def telemetry_archive_count():
     telemetry_files = [
-        file for file in os.lstdir("telemetry")
+        file for file in os.listdir("telemetry")
         if file.startswith("execution_history_")
     ]     
     print(
