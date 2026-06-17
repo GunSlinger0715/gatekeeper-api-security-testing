@@ -49,7 +49,7 @@
 class IntelligenceRecord: 
 
     def __init__(self):
-        
+
         self.target = None
 
         self.timestamp = None 
@@ -70,4 +70,10 @@ class IntelligenceRecord:
 
         self.outcome = None
 
+    def add_observation(self, observation):
+
+        self.observations.append(
+            
+        observation.to_dict()
+        )
 
