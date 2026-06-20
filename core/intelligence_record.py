@@ -74,6 +74,6 @@ class IntelligenceRecord:
 
         self.observations.append(
             
-        observation.to_dict()
+            observation.to_dict()
         )
 
