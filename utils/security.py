@@ -1,6 +1,8 @@
 # imports
 import re
 
+from core.observation_factory import create_observation
+
 
 # utils/security.py
 
@@ -45,6 +47,7 @@ def check_data_exposure(response):
 
 def check_info_leakage(response):
     findings = []
+    observations = []
 
     headers = response.headers
 
@@ -55,6 +58,15 @@ def check_info_leakage(response):
             "details": f"Server header exposed: {headers['server']}"
         })
 
+        observations.append(
+            create_observation(
+                observation_type="SERVER_HEADER_EXPOSTED",
+                details=f"Server header exposted: {headers['server']}",
+                confidence=100,
+                source="HEADER_ANALYZER"
+            )
+        )
+
     if "x-powered-by" in headers: 
         findings.append({
             "finding": "Information Leakage",
@@ -62,7 +74,7 @@ def check_info_leakage(response):
             "details": f"X-Powered-By header exposed: {headers['x-powered-by']}"
         })
 
-    return findings
+    return findings, observations
 
 # =========================================================
 # HEADER SECURITY ANALYSIS

@@ -39,6 +39,8 @@ class ExecutionContext:
 
         self.findings = []
 
+        self.observations = []
+
         self.score = 0
 
         self.risk = None
@@ -54,6 +56,12 @@ class ExecutionContext:
 
         self.findings.extend(findings)
 
+    def add_observation(self, observation):
+
+        self.observations.append(
+                observation.to_dict()
+            )
+        
 
     def set_score(self, score):
 
@@ -83,5 +91,6 @@ class ExecutionContext:
             "risk": self.risk,
             "current_phase": self.current_phase,
             "stability": self.stability,
-            "findings": self.findings
+            "findings": self.findings,
+            "observations": self.observations
         }
