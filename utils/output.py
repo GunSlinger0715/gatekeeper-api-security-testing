@@ -128,8 +128,10 @@ def run_security_checks(response, endpoint):
 
     print_data_exposure(findings, endpoint)
 
-    leaks = check_info_leakage(response)
+    leaks, observations = check_info_leakage(response)
     context.add_findings(leaks)
+    for observation in observations:
+        context.add_observation(observation)
     print_info_leakage(leaks, endpoint)
 
     header_results = check_header_integrity(response)
