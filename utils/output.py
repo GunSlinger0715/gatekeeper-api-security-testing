@@ -122,9 +122,12 @@ def run_security_checks(response, endpoint):
 
     lifecycle.enter_phase("SECURITY_ANALYSIS")
     context.set_phase(lifecycle.get_current_phase())
-    findings = check_data_exposure(response)
+    findings, observations = check_data_exposure(response)
+
     context.add_findings(findings)
-    
+
+    for observation in observations: 
+        context.add_observation(observation)
 
     print_data_exposure(findings, endpoint)
 

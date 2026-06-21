@@ -12,6 +12,7 @@ from core.observation_factory import create_observation
 
 def check_data_exposure(response):
     findings = []
+    observations = []
 
     # Safely get response body
     try:
@@ -38,8 +39,16 @@ def check_data_exposure(response):
                 "severity": "CRITICAL",
                 "details": f"Sensitive field detected: {field}"
             })
+            observations.append(
+                create_observation(
+                    observation_type="SENSITIVE_FIELD_EXPOSED",
+                    details=f"Sensitive field detected: {field}",
+                    confidence=100,
+                    source="DATA_EXPOSURE_ANALYZER"
+                )
+            )
 
-    return findings
+    return findings, observations
 
 # =========================================================
 # INFORMATION LEAKAGE ANALYSIS
@@ -60,8 +69,8 @@ def check_info_leakage(response):
 
         observations.append(
             create_observation(
-                observation_type="SERVER_HEADER_EXPOSTED",
-                details=f"Server header exposted: {headers['server']}",
+                observation_type="SERVER_HEADER_EXPOSED",
+                details=f"Server header exposed: {headers['server']}",
                 confidence=100,
                 source="HEADER_ANALYZER"
             )
