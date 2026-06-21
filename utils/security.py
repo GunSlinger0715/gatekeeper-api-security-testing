@@ -103,7 +103,8 @@ def check_header_integrity(response):
         "missing_headers": [],
         "misconfigured_headers": [],
         "valid_headers": [],
-        "findings": []
+        "findings": [], 
+        "observations": []
     }
 
     headers = response.headers
@@ -120,6 +121,15 @@ def check_header_integrity(response):
                 "severity": "HIGH",
                 "details": f"{header} header missing"
             })
+
+            results["observations"].append(
+                create_observation(
+                    observation_type="MISSING_SECURITY_HEADER",
+                    details=f"{header} header missing",
+                    confidence=100,
+                    source="HEADER_INTEGIRY_ANALYZER"
+                )
+            )
 
             continue
 
