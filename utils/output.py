@@ -133,20 +133,27 @@ def run_security_checks(response, endpoint):
 
     leaks, observations = check_info_leakage(response)
     context.add_findings(leaks)
+    
     for observation in observations:
         context.add_observation(observation)
     print_info_leakage(leaks, endpoint)
 
     header_results = check_header_integrity(response)
     context.add_findings(header_results["findings"])
+
+    for observation in header_results["observations"]:
+        context.add_observation(observation)
     
     print_header_integrity(header_results, endpoint)
 
-    unauthorized, secure_behavior = check_unauthorized_access(
+    unauthorized, secure_behavior, observations = check_unauthorized_access(
         response,
         endpoint,
         protected_endpoints
     )
+
+    for observation in observations: 
+        context.add_observation(observation)
 
     if unauthorized:
 

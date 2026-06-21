@@ -127,7 +127,7 @@ def check_header_integrity(response):
                     observation_type="MISSING_SECURITY_HEADER",
                     details=f"{header} header missing",
                     confidence=100,
-                    source="HEADER_INTEGIRY_ANALYZER"
+                    source="HEADER_INTEGRITY_ANALYZER"
                 )
             )
 
@@ -173,6 +173,7 @@ def check_unauthorized_access(response, endpoint, protected_endpoints):
 
     findings = []
     secure_behavior = []
+    observations = []
 
     if endpoint in protected_endpoints:  
 
@@ -182,15 +183,32 @@ def check_unauthorized_access(response, endpoint, protected_endpoints):
                     "severity": "HIGH",
                     "details": "Protected endpoint accessible without authentication"
                 })
+
+                observations.append(
+                    create_observation(
+                        observation_type="UNAUTHORIZED_ACCESS_ALLOWED",
+                        details="Protected endpoint accessible without authentication",
+                        confidence=100,
+                        source="AUTHORIZATION_ANALYZER"
+                    )
+                )
             elif response.status_code in [401, 403]:
 
                 secure_behavior.append({
                     "status": "PASS",
                     "details": "Protected endpoint correctly denied unauthorized access"
                 })
+                observations.append(
+                    create_observation(
+                        observation_type="AUTHORIZATION_ENFORCED",
+                        details="Protected endpoint correctly denied unauthorized access",
+                        confidence=100,
+                        source="AUTHORIZATION_ANALYZER"
+                    )
+                )
 
                 
-    return findings, secure_behavior
+    return findings, secure_behavior, observations
 
 # Sensitive field detection
 def check_sensitive_fields(response):
