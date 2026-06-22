@@ -213,11 +213,12 @@ def check_unauthorized_access(response, endpoint, protected_endpoints):
 # Sensitive field detection
 def check_sensitive_fields(response):
     findings = []
+    observations = []
 
     try: 
         data = response.json()
     except Exception:
-            return findings #Not JSON, skip
+            return findings, observations #Not JSON, skip
     
     data_str = str(data)
 
@@ -238,13 +239,22 @@ def check_sensitive_fields(response):
                 "details": f"{label} detected: {match}"
             })
 
+            observations.append(
+                create_observation(
+                    observation_type=f"{label.upper().replace(' ', ' ')}_EXPOSED",
+                    details=f"{label} detected: {match}",
+                    confidence=100,
+                    source="SENSITIVE_FIELD_ANALYZER"
+                )
+            )
+
             if label == "Token":
                 issues = analyze_token(match)
                 
                 for issue in issues: 
                     findings.append(issue)
 
-    return findings
+    return findings, observations 
 
 #Token Anomaly Detection
 def analyze_token(token):

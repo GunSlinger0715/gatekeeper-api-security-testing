@@ -178,8 +178,12 @@ def run_security_checks(response, endpoint):
     # ----------------------------
     # Sensitive Field Detection
     # ----------------------------
-    sensitive = check_sensitive_fields(response)
+    sensitive, observations = check_sensitive_fields(response)
+
     context.add_findings(sensitive)
+
+    for observation in observations: 
+        context.add_observation(observation)
 
     # Sensitive Findings Rendering
     print_sensitive_findings(sensitive, endpoint)
