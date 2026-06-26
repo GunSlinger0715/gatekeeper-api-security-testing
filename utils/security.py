@@ -161,7 +161,15 @@ def check_header_integrity(response):
                 results["valid_headers"].append(header)
 
     else: 
-        results["valid_headers"].append(header) 
+        results["valid_headers"].append(header)
+
+    # ------------------------------------
+    # Header Strength Validation
+    # ------------------------------------
+    strength_issues, strength_observations = validate_header_strength(headers)
+
+    results["findings"].extend(strength_issues)
+    results["observations"].extend(strength_observations) 
     
     return results    
 
@@ -241,24 +249,27 @@ def check_sensitive_fields(response):
 
             observations.append(
                 create_observation(
-                    observation_type=f"{label.upper().replace(' ', ' ')}_EXPOSED",
+                    observation_type=f"{label.upper().replace(' ', '_')}_EXPOSED",
                     details=f"{label} detected: {match}",
                     confidence=100,
                     source="SENSITIVE_FIELD_ANALYZER"
                 )
             )
 
-            if label == "Token":
-                issues = analyze_token(match)
-                
+            if label == "Token": 
+                issues, token_observations = analyze_token(match)
+
                 for issue in issues: 
                     findings.append(issue)
 
+                for observation in token_observations: 
+                    observations.append(observation)
     return findings, observations 
 
 #Token Anomaly Detection
 def analyze_token(token):
     issues = []
+    observations = []
 
     # Length checks
     if len(token) < 20:
@@ -268,12 +279,30 @@ def analyze_token(token):
             "details": "Token too short"
         })
 
+        observations.append(
+            create_observation(
+                observation_type="WEAK_TOKEN_STRUCTURE",
+                details="Token too short", 
+                confidence=100,
+                source="TOKEN_ANALYZER"
+            )
+        )
+
     if len(token) > 500:
         issues.append({
             "finding": "Suspicious Token Length",
             "severity": "MEDIUM",
             "details": "Token unusually long"
         })
+
+        observations.append(
+            create_observation(
+                observation_type="SUSPICIOUS_TOKEN_LENGTH",
+                details="Token unusually long",
+                confidence=100,
+                source="TOKEN_ANALYZER"
+            )
+        )
 
     # JWT structure check (header.payload.signature)
     parts = token.split(".")
@@ -284,7 +313,16 @@ def analyze_token(token):
             "details": "Token does not follow JWT header.payload.signature format"
         })
 
-    return issues
+        observations.append(
+            create_observation(
+                observation_type="INVALID_JWT_STRUCTURE",
+                details="Token does not follow JWT header.payload.signature format",
+                confidence=100,
+                source="TOKEN_ANALYZER"
+            )
+        )
+
+    return issues, observations
 
 def detect_and_analyze_tokens(data):
     findings = []
@@ -298,7 +336,7 @@ def detect_and_analyze_tokens(data):
         matches = token_pattern.findall(value)
 
         for token in matches:
-            issues = analyze_token(token)
+            issues, _ = analyze_token(token)
 
             for issue in issues:
                 issue["details"] += f" in field '{key}'"
@@ -310,6 +348,7 @@ def detect_and_analyze_tokens(data):
 #Header Strength Validation
 def validate_header_strength(headers):
     issues = []
+    observations = []
 
     # --- Content-Security-Policy ---
     csp = headers.get("Content-Security-Policy")
@@ -320,12 +359,31 @@ def validate_header_strength(headers):
                 "severity": "HIGH",
                 "details": "CSP is too permissive (contains'*')"
             })
+
+            observations.append(
+                create_observation(
+                    observation_type="WEAK_CSP_WILDCARD",
+                    details="CSP is too permissive (contains '*')",
+                    confidence=100,
+                    source="HEADER_STRENGTH_ANALYZER"
+                )
+            )
+
         if "unsafe-inline" in csp:
             issues.append({
                 "finding": "Weak Content Security Policy",
                 "severity": "HIGH",
                 "details": "CSP allows unsafe-inline (XSS risk)"
             })
+
+            observations.append(
+                create_observation(
+                    observation_type="UNSAFE_INLINE_CSP",
+                    details="CSP allows unsafe-inline (XSS risk)",
+                    confidence=100,
+                    source="HEADER_STRENGTH_ANALYZER"
+                )
+            )
 
     # --- Strict-Transport-Security ---
     hsts = headers.get("Strict-Transport-Security")
@@ -334,14 +392,33 @@ def validate_header_strength(headers):
             issues.append({
                 "finding": "Weak HTTP Strict Transport Security",
                 "severity": "MEDIUM",
-                "details": "HSTS missing includdeSubDomains"
+                "details": "HSTS missing includeSubDomains"
             })
+
+            observations.append(
+                create_observation(
+                    observation_type="HSTS_MISSING_INCLUDE_SUBDOMAINS",
+                    details="HSTS missing includeSubDomains",
+                    confidence=100,
+                    source="HEADER_STRENGTH_ANALYZER"
+                )
+            )
+
         if "max-age" not in hsts:
             issues.append({
                 "finding": "Weak HTTP Strict Transport Security",
                 "severity": "MEDIUM",
                 "details": "HSTS missing max-age"
             })
+
+            observations.append(
+                create_observation(
+                    observation_type="HSTS_MISSING_MAX_AGE",
+                    details="HSTS missing max-age",
+                    confidence=100,
+                    source="HEADER_STRENGTH_ANALYZER"
+                )
+            )
 
     # --- X-Frame-Options ---
     xfo = headers.get("X-Frame-Options")
@@ -352,5 +429,14 @@ def validate_header_strength(headers):
                 "severity": "MEDIUM",
                 "details": f"Weak X-Frame-Options value detected: {xfo}"
             })
+            
+            observations.append(
+                create_observation(
+                    observation_type="WEAK_X_FRAME_OPTIONS",
+                    details=f"Weak X-Frame-Options value detected: {xfo}",
+                    confidence=100,
+                    source="HEADER_STRENGTH_ANALYZER"
+                )
+            )
 
-    return issues
+    return issues, observations
