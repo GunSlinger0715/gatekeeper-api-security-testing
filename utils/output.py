@@ -15,6 +15,7 @@ from security.scoring import (
 
 from core.results import results_summary, print_operational_summary
 from core.lifecycle import ExecutionLifecycle
+from core.observation_summary import summarize_observations
 
 from config.colors import GREEN, YELLOW, RED, RESET
 from reporting.export import export_results_to_json
@@ -245,6 +246,20 @@ def run_security_checks(response, endpoint):
 
     export_execution_history()
     print("\n[DEBUG] Execution History Exported to JSON")
+
+    observation_summary = summarize_observations(context.observations)
+
+    print("\n========== OBSERVATION SUMMARY ==========")
+    print(f"Total Observations: {observation_summary['total']}")
+    print(f"Average Confidence: {observation_summary['average_confidence']}")
+
+    print("\nSources:")
+    for source in observation_summary["sources"]:
+        print(f" - {source}")
+
+    print("\nObservation Types:")
+    for observation_type in observation_summary["types"]:
+        print(f" - {observation_type}")
 
     lifecycle.print_completed_phases()
     
