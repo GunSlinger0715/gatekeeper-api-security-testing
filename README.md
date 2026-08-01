@@ -1,327 +1,286 @@
-<p align="center">
-  <img src="docs/images/GateKeeper Heimdal Monolith.png" width="100%">
-</p>
+# 🌳 Yggdrasil Labs Engineering
 
-# Project GateKeeper
+# 🛡 GateKeeper
 
-Project GateKeeper is a modular API security analysis framework designed to combine deterministic API validation with structured security analysis and severity-based risk scoring.
+## API Security Observation Engine
 
-The framework blends traditional QA-style endpoint testing with lightweight security intelligence to identify vulnerabilities, information leakage, misconfigurations, token anomalies, and sensitive data exposure within API responses.
+> **Every operational decision begins with trusted observations.**
+
+<img width="1536" height="1024" alt="ChatGPT Image Aug 1, 2026, 06_01_51 PM" src="https://github.com/user-attachments/assets/004753a3-966f-4658-a823-3ab9ec73d771" />
 
 ---
 
-# Features
+# Why GateKeeper Exists
 
-## API Validation
-- Endpoint response testing
-- HTTP status validation
-- Invalid endpoint handling
-- Request verification
+Modern security decisions are only as reliable as the observations that support them.
 
-## Security Analysis
-- Information leakage detection
-- Missing security header detection
-- Misconfigured header analysis
-- Header strength validation
-- Unauthorized access detection
-- Trust-boundary validation
-- Missing authentication analysis
+Security professionals are constantly evaluating APIs, services, and applications that generate thousands of responses every day. However, raw responses alone do not provide operational understanding.
 
-## Authorization Validation
-- Protected endpoint awareness
-- Contextual trust-boundary validation
-- Secure authorization behavior validation scaffolding
-- Unauthorized access detection architecture
+GateKeeper exists to collect trusted observations from APIs and connected systems, transforming technical responses into structured operational telemetry that can be interpreted by the OVERWATCH platform.
 
-## Token Analysis
-- JWT structure validation
-- Token anomaly detection
-- Length and entropy analysis
+Rather than replacing existing security testing tools, GateKeeper serves as the observation layer of OVERWATCH, providing accurate, repeatable, and explainable data for downstream intelligence.
 
-## Sensitive Data Exposure
-- Password exposure detection
-- Token exposure detection
-- Internal field discovery
-- Sensitive response analysis
+Everything begins with observation.
 
-## Risk Scoring Engine
-- Weighted severity scoring
-- LOW / MEDIUM / HIGH / CRITICAL classification
-- Structured findings model
-- Severity-aware analysis pipeline
+---
 
-## Operational Telemetry Engine
+# Mission
 
-GateKeeper now includes a centralized operational telemetry system designed to aggregate and summarize API security test execution results.
+GateKeeper's mission is to provide reliable, repeatable, and explainable API security observations that serve as the trusted foundation for operational decision intelligence.
 
-### Current Telemetry Capabilities
+Every observation should answer three questions:
 
-- Centralized endpoint tracking
-- Security score aggregation
-- Risk-level classification
-- Missing security header analysis
-- Information exposure tracking
-- Sensitive field detection
-- Timeout resilience handling
-- Graceful response degradation
-- Unified pytest session lifecycle orchestration
-- End-of-session operational summaries
+- What happened?
+- Why did it happen?
+- Can the result be trusted?
 
-### Operational Summary Example
+---
+
+# Core Responsibilities
+
+GateKeeper performs the first stage of the OVERWATCH operational pipeline.
+
+Its responsibilities include:
+
+- API endpoint discovery
+- Security validation
+- Response inspection
+- Header analysis
+- Authentication testing
+- Sensitive data exposure detection
+- Operational telemetry collection
+- Risk classification
+- Structured observation reporting
+
+---
+
+# Observation Pipeline
 
 ```text
-========================================
-GATEKEEPER OPERATIONAL SUMMARY
-========================================
-
-Endpoints Tested: 2
-Successful Responses: 2
-Failed Responses: 0
-Timeouts Detected: 0
-
-Average Security Score: 60
-Highest Risk Level: HIGH RISK
-
-Information Exposures: 0
-Missing Headers: 12
-Sensitive Findings: 0
-
-System Stability: DEGRADED
-========================================
+Target System
+      │
+      ▼
+API Request
+      │
+      ▼
+Security Testing
+      │
+      ▼
+Telemetry Collection
+      │
+      ▼
+Risk Classification
+      │
+      ▼
+Operational Observation
+      │
+      ▼
+Heimdal Interpretation
 ```
 
 ---
 
-# Architecture Highlights
+# Testing Capabilities
 
-GateKeeper uses a modular architecture with centralized structured findings generation.
+## Current Capabilities
 
-The framework validates not only endpoint availability, but also secure endpoint behavior through trust-boundary analysis and structured security enforcement validation.
+- ✅ Header Validation
+- ✅ HTTP Response Analysis
+- ✅ Authentication Testing
+- ✅ JWT Inspection
+- ✅ Sensitive Data Detection
+- ✅ Response Time Measurement
+- ✅ Endpoint Availability
+- ✅ Status Code Validation
 
-```python
-{
-    "finding": "Information Leakage",
-    "severity": "MEDIUM",
-    "details": "Server header exposed: cloudflare",
-    "why_it_matters": "Exposed infrastructure details may assist reconnaissance efforts.",
-    "recommended_actions": [
-        "Review reverse proxy header policies",
-        "Minimize infrastructure disclosure"
-    ],
-    "trust_level": "moderate"
-}
-```
+## Planned Capabilities
 
-This enables:
-- Consistent scoring
-- Structured reporting
-- Future intelligence-correlation integration
-- Scalable detection expansion
-- Standardized JSON export support
+- ⬜ OpenAPI Discovery
+- ⬜ GraphQL Testing
+- ⬜ OAuth Analysis
+- ⬜ Rate Limiting Analysis
+- ⬜ OWASP API Top 10 Coverage
+- ⬜ Passive Intelligence Collection
 
 ---
 
-## Architecture Evolution
+# Risk Classification
 
-GateKeeper originally began as a lightweight API security testing framework focused on endpoint validation and response analysis.
+| Risk | Meaning |
+|------|---------|
+| 🟢 LOW | Informational Observation |
+| 🟡 MEDIUM | Requires Review |
+| 🟠 HIGH | Significant Security Concern |
+| 🔴 CRITICAL | Immediate Attention Required |
 
-The platform has since evolved into a modular operational telemetry system capable of:
-
-- Aggregating distributed security findings
-- Performing runtime risk analysis
-- Tracking endpoint stability
-- Generating centralized operational summaries
-- Supporting scalable future telemetry integrations
-
-This architectural evolution establishes the foundation for future enhancements such as:
-- Historical trend analysis
-- SIEM integrations
-- Dashboard reporting
-- Export pipelines
-- Threat intelligence correlation
+Each finding is structured for interpretation by Heimdal and subsequent operational analysis.
 
 ---
 
-## Reliability Philosophy
+# Architecture
 
-GateKeeper is designed using a graceful degradation philosophy.
-
-When endpoints fail, timeout, or return malformed responses, the framework:
-- Avoids catastrophic test crashes
-- Preserves telemetry collection
-- Logs operational instability
-- Continues executing remaining security analysis safely
-
-This approach enables resilient security testing even in unstable environments.
-
----
-
-# Ecosystem Vision
-
-<p align="center">
-  <img src="docs/images/philosophy.png" width="100%">
-</p>
+GateKeeper follows a modular architecture that separates observation from interpretation.
 
 ```text
-GateKeeper → Observe
-Monolith → Remember
-Heimdall → Interpret
+                 API Target
+                      │
+                      ▼
+                 Scanner Engine
+                      │
+                      ▼
+                 Validation Modules
+                      │
+                      ▼
+              Telemetry Collection
+                      │
+                      ▼
+              Observation Object
+                      │
+                      ▼
+              OVERWATCH Platform
 ```
 
-Project GateKeeper is evolving toward a cooperative security intelligence ecosystem built around layered responsibilities and explainable security analysis.
+GateKeeper focuses on one responsibility:
 
-- **GateKeeper** performs endpoint observation, validation, and structured security analysis.
-- **Monolith** serves as the centralized intelligence persistence and contextual memory layer.
-- **Heimdall** acts as the interpretation and adaptive analysis layer, transforming technical findings into contextual human-readable intelligence.
-
-This architecture supports future explainable security intelligence workflows, adaptive analysis, structured trust-aware interpretation, and resilient analysis across heterogeneous API environments.
+> **Observe accurately.**
 
 ---
 
-# Example Output
+# Current Development Status
 
-```text
-[SECURITY FINDING] GET /post/1 - Potential information leakage detected:
+## Current Phase
 
- - [MEDIUM] Server header exposed: cloudflare
+🟢 Active Development
 
-----------------------------------------
+### Completed
 
-[FAIL] Missing Security Headers:
+- ✅ Core Scanner
+- ✅ API Testing Framework
+- ✅ Response Validation
+- ✅ Risk Scoring
+- ✅ Observation Model
 
- - Content-Security-Policy
- - Referrer-Policy
- - Permissions-Policy
+### In Progress
 
-----------------------------------------
-
-[SECURITY SCORE] GET /post/1 → 90/100
-```
+- ⬜ Multi-target Scanning
+- ⬜ Parallel Execution
+- ⬜ Plugin Framework
+- ⬜ Live Dashboard Integration
 
 ---
 
-# Project Structure
+# Roadmap
+
+## Phase 1 — Foundation
+
+✔ Complete
+
+---
+
+## Phase 2 — Operational Testing
+
+🔄 In Progress
+
+---
+
+## Phase 3 — Advanced Security Analysis
+
+- GraphQL Support
+- OpenAPI Discovery
+- OAuth Analysis
+- Passive Intelligence Collection
+- Enhanced OWASP Coverage
+
+---
+
+## Phase 4 — Enterprise Observation Engine
+
+- Distributed Scanning
+- Cloud Deployment
+- High Availability
+- Multi-Tenant Support
+
+---
+
+# Repository Structure
 
 ```text
 gatekeeper-api-security-testing/
 
-├── core/
-│   ├── client.py
-│   ├── orchestration.py
-│   └── results.py
-│
-├── security/
-│   ├── security.py
-│   ├── token_analysis.py
-│   └── scoring.py
-│
-├── reporting/
-│   ├── output.py
-│   └── export.py
-│
-├── config/
-│   ├── colors.py
-│   ├── settings.py
-│   └── protected_endpoints.json
-│
+├── gatekeeper/
 ├── tests/
-│   ├── test_endpoints.py
-│   └── token_analysis.py
-│
 ├── docs/
-│
+├── examples/
 ├── README.md
-├── requirements.txt
 ├── LICENSE
-└── conftest.py
+└── requirements.txt
 ```
 
 ---
 
-# Installation
+# Technology Stack
 
-```bash
-git clone https://github.com/GunSlinger0715/gatekeeper-api-security-testing.git
+| Technology | Purpose |
+|------------|---------|
+| Python | Core Engine |
+| Pytest | Test Framework |
+| Requests | HTTP Communication |
+| REST APIs | Target Interfaces |
+| JSON | Observation Format |
+| GitHub | Source Control |
 
-cd gatekeeper-api-security-testing
+### Future Technologies
 
-pip install -r requirements.txt
-```
-
----
-
-# Running GateKeeper
-
-```bash
-pytest -s
-```
-
----
-
-## Continuous Integration
-
-GateKeeper uses GitHub Actions for automated continuous integration testing.
-
-Every push and pull request to the `main` branch automatically triggers:
-
-- Dependency installation
-- Environment validation
-- Automated pytest execution
-
-This ensures the project remains stable, portable, and regression-resistant as the architecture evolves.
-
-### Engineering Philosophy
-
-> From Validation to Intelligence.  
-> From GateKeeper to Heimdall.
+- Docker
+- Kubernetes
+- Go Services
+- Async Processing
 
 ---
 
-# Current Focus
+# Related Projects
 
-Current development priorities include:
-- Structured findings architecture
-- Severity-based scoring refinement
-- Enhanced token anomaly analysis
-- Improved reporting and visualization
-- CI/CD workflow refinement
-- Operational telemetry stabilization
-- Resilient execution orchestration
+🌳 **Yggdrasil Foundation**  
+Engineering philosophy and standards.
 
----
+🛡 **OVERWATCH Platform**  
+The operational intelligence ecosystem.
 
-# Future Roadmap
+👁 **Heimdal**  
+Transforms observations into operational context.
 
-Planned future enhancements include:
-- Assisted finding correlation and intelligence aggregation
-- Advanced attack pattern recognition
-- OWASP API Top 10 expansion
-- Enhanced dashboards and reporting
-- Config-driven detection rules
-- Intelligent anomaly analysis
-- Historical telemetry tracking
-- SIEM integration support
-- Behavioral API analysis pipelines
+🗄 **Monolith**  
+Preserves historical intelligence.
+
+⚖ **Odin**  
+Produces explainable operational decisions.
+
+🔨 **Forge**  
+Transforms decisions into recommendations.
+
+📊 **OVERWATCH Dashboard**  
+Visualizes the complete operational picture.
 
 ---
 
-# Long-Term Vision
+# Engineering Philosophy
 
-GateKeeper is designed to evolve beyond lightweight API security testing into a scalable, context-aware security analysis platform capable of adapting to increasingly complex API ecosystems and response behaviors.
+This repository follows the engineering principles established by the **Yggdrasil Foundation**.
 
-Future architectural development will focus on intelligent response analysis, adaptive validation logic, and resilient trust-aware security workflows, including:
+We believe software should:
 
-- Adaptive response-type detection and schema-aware validation
-- Dynamic handling of JSON, HTML, XML, and text-based API responses
-- Intelligent response classification and contextual trust-boundary analysis
-- Resilient parser routing and graceful handling of unexpected response formats
+- Solve real operational problems.
+- Produce explainable results.
+- Support human decision-making.
+- Remain modular and maintainable.
+- Be engineered with purpose.
 
-Future ecosystem development may include behavioral API telemetry analysis, anomaly inspection workflows, and structured intelligence persistence across modular security subsystems.
+Every project we build should leave people saying:
+
+> **"This made my job easier."**
 
 ---
 
 # License
 
-This project is licensed under the MIT License.
-
-See the LICENSE file for additional details.
+Released under the **MIT License**.<img width="1536" height="1024" alt="ChatGPT Image Aug 1, 2026, 06_01_51 PM" src="https://github.com/user-attachments/assets/6ec87bca-f941-425e-8b9d-f83294d32b14" />
